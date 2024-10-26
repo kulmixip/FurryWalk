@@ -2,6 +2,8 @@ package com.example.composeproject.navigation
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -20,13 +22,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.composeproject.data.SignUpViewModel
 import com.example.composeproject.screens.DetailsScreen
 import com.example.composeproject.screens.HomeScreen
 import com.example.composeproject.screens.LoginScreen
+import com.example.composeproject.screens.SignUpDetailsScreen
+import com.example.composeproject.screens.SignUpScreen
 
 data class BottomNavItem(
     val route: String,
@@ -37,6 +43,7 @@ data class BottomNavItem(
 @Composable
 fun NavigationApp() {
     val navController = rememberNavController()
+    val signUpViewModel: SignUpViewModel = viewModel()
     val context = LocalContext.current
     var currentRoute by remember { mutableStateOf("login") }
 
@@ -49,7 +56,7 @@ fun NavigationApp() {
     Scaffold(
         bottomBar = {
             Log.d("NavigationApp", "Current route: $currentRoute")
-            if (currentRoute != "login") {
+            if (currentRoute != "login" && currentRoute != "signup" && currentRoute != "signupdetails") {
                 BottomNavigationBar(navController)
             }
         }
@@ -73,6 +80,8 @@ fun NavigationApp() {
                     }
                 )
             }
+            composable("signup") { SignUpScreen(navController, signUpViewModel) }
+            composable("signupdetails") { SignUpDetailsScreen(navController, signUpViewModel) }
             composable("home") { HomeScreen(navController) }
             composable("details") { DetailsScreen(navController) }
         }

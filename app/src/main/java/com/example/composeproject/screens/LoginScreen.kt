@@ -18,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +39,7 @@ import com.example.composeproject.R
 import com.example.composeproject.RetrofitInstance
 import com.example.composeproject.components.InputField
 import com.example.composeproject.data.model.LoginRequest
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
 @Composable
@@ -59,6 +61,16 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
         val painter = rememberAsyncImagePainter(model = R.drawable.furrywalk_logo)
+        val systemUiController = rememberSystemUiController()
+        val color = Color(0xFFFFFFFF)
+
+        // Set the status bar color to match the blue box
+        LaunchedEffect(Unit) {
+            systemUiController.setStatusBarColor(
+                color = color,
+                darkIcons = false
+            )
+        }
 
         Spacer(Modifier.height(75.dp))
         Image(
@@ -141,7 +153,7 @@ fun LoginScreen(
 
                 Text(
                     text = signUpText,
-                    modifier = Modifier.clickable (onClick = { navController.navigate("details") }) // Make text clickable
+                    modifier = Modifier.clickable (onClick = { navController.navigate("signup") }) // Make text clickable
                 )
 
                 Spacer(Modifier.height(35.dp))
