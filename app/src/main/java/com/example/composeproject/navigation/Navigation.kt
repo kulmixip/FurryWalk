@@ -31,6 +31,7 @@ import com.example.composeproject.data.SignUpViewModel
 import com.example.composeproject.screens.DetailsScreen
 import com.example.composeproject.screens.HomeScreen
 import com.example.composeproject.screens.LoginScreen
+import com.example.composeproject.screens.MessagesScreen
 import com.example.composeproject.screens.SignUpDetailsScreen
 import com.example.composeproject.screens.SignUpScreen
 
@@ -96,6 +97,7 @@ fun NavigationApp() {
             composable("signupdetails") { SignUpDetailsScreen(navController, signUpViewModel) }
             composable("home") { HomeScreen(navController) }
             composable("details") { DetailsScreen(navController) }
+            composable("messages") { MessagesScreen(navController) }
         }
     }
 }
