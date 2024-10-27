@@ -64,7 +64,7 @@ fun NavigationApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "login",
+            startDestination = "home",
             Modifier.padding(innerPadding)
         ) {
             composable("login") {
