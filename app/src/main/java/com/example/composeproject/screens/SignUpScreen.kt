@@ -1,5 +1,6 @@
 package com.example.composeproject.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,25 +35,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.composeproject.RetrofitInstance
 import com.example.composeproject.components.InputField
 import com.example.composeproject.data.SignUpViewModel
+import com.example.composeproject.data.model.SignUpRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen(
     navController: NavHostController,
-    viewModel: SignUpViewModel
+    viewModel: SignUpViewModel,
+    onSignUpSuccess: (Int, String) -> Unit
 ){
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val systemUiController = rememberSystemUiController()
     val color = Color(0xFFFF2C55)
 
-    // Set the status bar color to match the blue box
     LaunchedEffect(Unit) {
         systemUiController.setStatusBarColor(
             color = color,
-            darkIcons = false // Use light icons for dark background color
+            darkIcons = false
         )
     }
 
@@ -117,12 +121,38 @@ fun SignUpScreen(
                 leadingIcon = Icons.Default.Lock
             )
             Spacer(modifier = Modifier.height(24.dp))
+
+            val isButtonEnabled = viewModel.email.isNotEmpty() &&
+                    viewModel.password.isNotEmpty() &&
+                    viewModel.repeatPassword.isNotEmpty()
+
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = {navController.navigate("signupdetails")},
+                onClick = {
+                    if (viewModel.password != viewModel.repeatPassword) {
+                        Toast.makeText(context, "Passwords don't match", Toast.LENGTH_SHORT).show()
+                    } else {
+                        coroutineScope.launch {
+                            val signupRequest = SignUpRequest(
+                                email = viewModel.email,
+                                password = viewModel.password
+                            )
+                            try {
+                                val response = RetrofitInstance.api.signup(signupRequest)
+                                val status = response.status
+                                val message = response.message
+
+                                onSignUpSuccess(status, message)
+                            } catch (e: Exception) {
+                                Toast.makeText(context, "Signup Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFFF2C55)
                 ),
+                enabled = isButtonEnabled
             ) {
                 Text(text = "Continue")
             }
