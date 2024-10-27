@@ -85,7 +85,7 @@ fun HomeScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         // Category
-        Text(text = "Take your tour", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Text(text = "What are you looking for?", fontSize = 18.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(2.dp))
         Row(
             modifier = Modifier
