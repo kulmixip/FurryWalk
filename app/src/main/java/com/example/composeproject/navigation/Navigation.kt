@@ -93,7 +93,19 @@ fun NavigationApp() {
                     }
                 )
             }
-            composable("signupdetails") { SignUpDetailsScreen(navController, signUpViewModel) }
+            composable("signupdetails") {
+                SignUpDetailsScreen(
+                    navController,
+                    signUpViewModel,
+                    onSignUpDetailsSuccess = {status, message ->
+                        if(status == 200){
+                            navController.navigate("home")
+                        } else {
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                )
+            }
             composable("home") { HomeScreen(navController) }
             composable("details") { DetailsScreen(navController) }
         }
