@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -52,6 +54,7 @@ fun SignUpScreen(
     val coroutineScope = rememberCoroutineScope()
     val systemUiController = rememberSystemUiController()
     val color = Color(0xFFFF2C55)
+    val loading = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         systemUiController.setStatusBarColor(
@@ -129,8 +132,10 @@ fun SignUpScreen(
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
+                    loading.value = true
                     if (viewModel.password != viewModel.repeatPassword) {
                         Toast.makeText(context, "Passwords don't match", Toast.LENGTH_SHORT).show()
+                        loading.value = false
                     } else {
                         coroutineScope.launch {
                             val signupRequest = SignUpRequest(
@@ -145,6 +150,7 @@ fun SignUpScreen(
                                 onSignUpSuccess(status, message)
                             } catch (e: Exception) {
                                 Toast.makeText(context, "Signup Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                                loading.value = false
                             }
                         }
                     }
@@ -152,9 +158,16 @@ fun SignUpScreen(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFFF2C55)
                 ),
-                enabled = isButtonEnabled
+                enabled = isButtonEnabled && !loading.value
             ) {
-                Text(text = "Continue")
+                if (loading.value) {
+                    CircularProgressIndicator(
+                        color = Color.White,
+                        modifier = Modifier.size(20.dp) // Adjust size if needed
+                    )
+                } else {
+                    Text(text = "Continue")
+                }
             }
         }
     }
