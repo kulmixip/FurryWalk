@@ -74,7 +74,5 @@ fun MessagesScreen(navController: NavHostController) {
                 Text("Send")
             }
         }
-
-        // Navbar
     }
 }
