@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -30,7 +31,7 @@ fun HomeScreen(navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    ComposeProjectTheme {
-        HomeScreen("Hanne")
+    val navController = rememberNavController()
+    HomeScreen(navController)
     }
 }
