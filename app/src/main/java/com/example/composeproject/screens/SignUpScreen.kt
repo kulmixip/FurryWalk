@@ -114,14 +114,16 @@ fun SignUpScreen(
                 label = "Password",
                 value = remember { mutableStateOf(viewModel.password) },
                 onValueChange = { viewModel.password = it },
-                leadingIcon = Icons.Default.Lock
+                leadingIcon = Icons.Default.Lock,
+                isPassword = true
             )
             Spacer(modifier = Modifier.height(24.dp))
             InputField(
                 label = "Repeat password",
                 value = remember { mutableStateOf(viewModel.repeatPassword) },
                 onValueChange = { viewModel.repeatPassword = it },
-                leadingIcon = Icons.Default.Lock
+                leadingIcon = Icons.Default.Lock,
+                isPassword = true
             )
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -150,6 +152,7 @@ fun SignUpScreen(
                                 onSignUpSuccess(status, message)
                             } catch (e: Exception) {
                                 Toast.makeText(context, "Signup Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                            } finally {
                                 loading.value = false
                             }
                         }

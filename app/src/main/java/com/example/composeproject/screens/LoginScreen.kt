@@ -87,12 +87,12 @@ fun LoginScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "Brukernavn: Demo")
-            Text(text = "Passord: Demo12345")
+            Text(text = "Email: demo@demo.no")
+            Text(text = "Password: Demo12345")
 
             // Use the universal input fields
             InputField(
-                label = "Username",
+                label = "Email",
                 value = remember { mutableStateOf(username) },
                 onValueChange = { username = it },
                 leadingIcon = Icons.Default.Person
@@ -104,7 +104,8 @@ fun LoginScreen(
                 label = "Password",
                 value = remember { mutableStateOf(password) },
                 onValueChange = { password = it },
-                leadingIcon = Icons.Default.Lock
+                leadingIcon = Icons.Default.Lock,
+                isPassword = true
             )
 
             Spacer(modifier = Modifier.height(24.dp))
