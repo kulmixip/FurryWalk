@@ -38,20 +38,21 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
+    // Main column layout
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.Start,
+            .fillMaxSize() // Take up the entire screen space
+            .padding(16.dp), // Applies padding to edges of Column
+        horizontalAlignment = Alignment.Start, // Align content to the start horizontally
         verticalArrangement = Arrangement.spacedBy(16.dp) // Add consistent spacing between items
     ) {
-        // Top bar
+        // Top bar ROW with filter
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(), // Make row fill width
+            horizontalArrangement = Arrangement.SpaceBetween, // Space out elements in the row
+            verticalAlignment = Alignment.CenterVertically // Center items vertically in the row
         ) {
-            IconButton(onClick = { /* TODO: Open filter */ }) {
+            IconButton(onClick = { /* TODO: Open filter */ }) { // Button to open filter
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Filter Icon"
@@ -67,12 +68,12 @@ fun HomeScreen(navController: NavHostController) {
 
         // Search Bar
         OutlinedTextField(
-            value = "",
-            onValueChange = { /* TODO: Handle search */ },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text(text = "Search") },
-            shape = RoundedCornerShape(12.dp),
-            leadingIcon = @androidx.compose.runtime.Composable {
+            value = "", // Current text in text field (empty)
+            onValueChange = { /* TODO: Handle search */ }, // Handle text change
+            modifier = Modifier.fillMaxWidth(), // Fill width
+            placeholder = { Text(text = "Search") }, // Placeholder text
+            shape = RoundedCornerShape(12.dp), // Round corners
+            leadingIcon = @androidx.compose.runtime.Composable { // Search icon
                 Icon(
                     imageVector = Icons.Default.Search, // Use built-in Material Search icon
                     contentDescription = "Search Icon"
@@ -80,25 +81,28 @@ fun HomeScreen(navController: NavHostController) {
             }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp)) // Space between search bar and category section
 
         // Category
         Text(text = "What are you looking for?", fontSize = 18.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(2.dp))
+
+        // Horizontal scrollable row for categories
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                .fillMaxWidth() // Full width of row
+                .horizontalScroll(rememberScrollState()), // Enable horizontal scrolling
+            horizontalArrangement = Arrangement.spacedBy(8.dp) // Space out each chip
 
         ) {
+            // Creat a button for each category in the list
             listOf("Closest to me", "Golden Retriever", "Active", "Private", "Cat").forEach { category ->
                 Button(
-                    onClick = { /* TODO: Filter by category */ },
+                    onClick = { /* TODO: Filter by category */ }, // Action when button is clicked
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (category == "Golden Retriever") Color.Red else Color.LightGray
                     ),
-                    shape = CircleShape
+                    shape = CircleShape // Make button round
                 ) {
                     Text(
                         text = category,
