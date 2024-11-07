@@ -82,7 +82,7 @@ fun ProfileScreen(
             Image(
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(viewModel.image.ifEmpty { "https://www.example.com/default-image.jpg" })
+                        .data(viewModel.image.ifEmpty { "https://biljard.catchmedia.no/files/furrywalk/images.jpg" })
                         .build()
                 ),
                 contentDescription = "Profile Picture",

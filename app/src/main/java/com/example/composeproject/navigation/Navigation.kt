@@ -69,7 +69,7 @@ fun NavigationApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "profile",
+            startDestination = "login",
             Modifier.padding(innerPadding)
         ) {
             composable("login") {
@@ -81,6 +81,11 @@ fun NavigationApp() {
                             configViewModel.id = profile.id
                             configViewModel.firstName = profile.firstName
                             configViewModel.lastName = profile.lastName
+                            configViewModel.email = profile.email
+                            configViewModel.phone = profile.phone
+                            configViewModel.age = profile.age
+                            configViewModel.rating = profile.rating
+                            configViewModel.location = profile.location
                             configViewModel.image = profile.image
 
                             navController.navigate("home") {
@@ -115,6 +120,10 @@ fun NavigationApp() {
                             configViewModel.firstName = profile.firstName
                             configViewModel.lastName = profile.lastName
                             configViewModel.email = profile.email
+                            configViewModel.phone = profile.phone
+                            configViewModel.age = profile.age
+                            configViewModel.rating = profile.rating
+                            configViewModel.location = profile.location
                             configViewModel.image = profile.image
 
                             navController.navigate("home")
