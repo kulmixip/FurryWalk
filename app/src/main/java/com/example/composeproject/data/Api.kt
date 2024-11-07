@@ -8,6 +8,8 @@ import com.example.composeproject.data.model.SignUpDetailsRequest
 import com.example.composeproject.data.model.SignUpDetailsResponse
 import com.example.composeproject.data.model.SignUpRequest
 import com.example.composeproject.data.model.SignUpResponse
+import com.example.composeproject.data.model.UpdateProfileRequest
+import com.example.composeproject.data.model.UpdateProfileResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -23,6 +25,9 @@ interface Api {
 
     @POST(".")
     suspend fun sendMessage(@Body request: NewMessageRequest): NewMessageResponse
+
+    @POST(".")
+    suspend fun updateProfile(@Body request: UpdateProfileRequest): UpdateProfileResponse
 
     companion object {
         const val BASE_URL = "https://biljard.catchmedia.no/api2/"

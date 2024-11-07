@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -33,6 +35,7 @@ import com.example.composeproject.screens.DetailsScreen
 import com.example.composeproject.screens.HomeScreen
 import com.example.composeproject.screens.LoginScreen
 import com.example.composeproject.screens.MessagesScreen
+import com.example.composeproject.screens.ProfileScreen
 import com.example.composeproject.screens.SignUpDetailsScreen
 import com.example.composeproject.screens.SignUpScreen
 
@@ -66,7 +69,7 @@ fun NavigationApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "login",
+            startDestination = "profile",
             Modifier.padding(innerPadding)
         ) {
             composable("login") {
@@ -111,6 +114,7 @@ fun NavigationApp() {
                             configViewModel.id = profile.id
                             configViewModel.firstName = profile.firstName
                             configViewModel.lastName = profile.lastName
+                            configViewModel.email = profile.email
                             configViewModel.image = profile.image
 
                             navController.navigate("home")
@@ -121,8 +125,13 @@ fun NavigationApp() {
                 )
             }
             composable("home") { HomeScreen(navController, configViewModel) }
-            composable("details") { DetailsScreen(navController) }
             composable("messages") { MessagesScreen(navController) }
+            composable("profile") {
+                ProfileScreen(
+                    navController,
+                    configViewModel
+                )
+            }
         }
     }
 }
@@ -132,7 +141,8 @@ fun BottomNavigationBar(navController: NavController) {
     NavigationBar {
         val items = listOf(
             BottomNavItem("home", "Home", Icons.Default.Home),
-            BottomNavItem("details", "Details", Icons.Default.Info)
+            BottomNavItem("messages", "Messages", Icons.Default.MailOutline),
+            BottomNavItem("profile", "Profile", Icons.Default.Person)
         )
         items.forEach { item ->
             NavigationBarItem(
