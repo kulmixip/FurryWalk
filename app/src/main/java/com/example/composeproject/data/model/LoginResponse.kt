@@ -3,5 +3,6 @@ package com.example.composeproject.data.model
 data class LoginResponse(
     val status: Int,
     val message: String,
-    val profile: List<Profile>
+    //val profileId: Int
+    val profile: Profile
 )

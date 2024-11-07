@@ -1,5 +1,6 @@
 package com.example.composeproject.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -38,6 +39,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.composeproject.R
 import com.example.composeproject.RetrofitInstance
 import com.example.composeproject.components.InputField
+import com.example.composeproject.data.ConfigViewModel
 import com.example.composeproject.data.model.LoginRequest
 import com.example.composeproject.data.model.Profile
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -46,7 +48,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     navController: NavHostController,
-    onLoginSuccess: (Int, String, List<Profile>) -> Unit
+    onLoginSuccess: (Int, String, Profile) -> Unit
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -131,6 +133,7 @@ fun LoginScreen(
                             onLoginSuccess(status, message, profile)
                         } catch (e: Exception) {
                             Toast.makeText(context, "Login Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                            Log.e("LoginError", "Login failed", e)
                         }
                     }
                 },

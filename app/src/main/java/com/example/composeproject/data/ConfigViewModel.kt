@@ -1,13 +1,14 @@
 package com.example.composeproject.data
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
 class ConfigViewModel: ViewModel() {
-    val id by mutableStateOf("")
+    var id by mutableIntStateOf(0)
     var firstName by mutableStateOf("")
     var lastName by mutableStateOf("")
-    val image by mutableStateOf("")
+    var image by mutableStateOf("")
 }

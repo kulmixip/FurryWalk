@@ -35,9 +35,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.composeproject.data.ConfigViewModel
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(
+    navController: NavHostController,
+    viewModel: ConfigViewModel
+) {
     // Main column layout
     Column(
         modifier = Modifier
@@ -59,6 +63,8 @@ fun HomeScreen(navController: NavHostController) {
                 )
             }
         }
+
+        Text(text = "Velkommen " + viewModel.firstName + ' ' + viewModel.lastName)
 
         // Title
         Text(text = "Pet near you", fontSize = 28.sp, fontWeight = FontWeight.Bold)
@@ -132,11 +138,4 @@ fun HomeScreen(navController: NavHostController) {
             Text(text = "Messages")
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    val navController = rememberNavController()
-    HomeScreen(navController)
 }

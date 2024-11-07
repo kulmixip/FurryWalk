@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.composeproject.data.ConfigViewModel
 import com.example.composeproject.data.SignUpViewModel
 import com.example.composeproject.screens.DetailsScreen
 import com.example.composeproject.screens.HomeScreen
@@ -45,6 +46,7 @@ data class BottomNavItem(
 fun NavigationApp() {
     val navController = rememberNavController()
     val signUpViewModel: SignUpViewModel = viewModel()
+    val configViewModel: ConfigViewModel = viewModel()
     val context = LocalContext.current
     var currentRoute by remember { mutableStateOf("login") }
 
@@ -72,7 +74,11 @@ fun NavigationApp() {
                     navController,
                     onLoginSuccess = { status, message, profile ->
                         if (status == 200) {
-                            Toast.makeText(context, profile[0].id, Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(context, "Profile ID: ${profile.id}", Toast.LENGTH_SHORT).show()
+                            configViewModel.id = profile.id
+                            configViewModel.firstName = profile.firstName
+                            configViewModel.lastName = profile.lastName
+                            configViewModel.image = profile.image
 
                             navController.navigate("home") {
                                 popUpTo("login") { inclusive = true }
@@ -109,7 +115,7 @@ fun NavigationApp() {
                     }
                 )
             }
-            composable("home") { HomeScreen(navController) }
+            composable("home") { HomeScreen(navController, configViewModel) }
             composable("details") { DetailsScreen(navController) }
             composable("messages") { MessagesScreen(navController) }
         }
