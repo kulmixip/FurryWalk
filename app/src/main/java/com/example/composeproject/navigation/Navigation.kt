@@ -66,7 +66,7 @@ fun NavigationApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "login",
             Modifier.padding(innerPadding)
         ) {
             composable("login") {
@@ -106,8 +106,13 @@ fun NavigationApp() {
                 SignUpDetailsScreen(
                     navController,
                     signUpViewModel,
-                    onSignUpDetailsSuccess = {status, message ->
+                    onSignUpDetailsSuccess = {status, message, profile ->
                         if(status == 200){
+                            configViewModel.id = profile.id
+                            configViewModel.firstName = profile.firstName
+                            configViewModel.lastName = profile.lastName
+                            configViewModel.image = profile.image
+
                             navController.navigate("home")
                         } else {
                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()

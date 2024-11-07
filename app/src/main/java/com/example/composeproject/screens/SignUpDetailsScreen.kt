@@ -1,5 +1,6 @@
 package com.example.composeproject.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -40,6 +41,7 @@ import com.example.composeproject.RetrofitInstance
 import com.example.composeproject.components.InputField
 import com.example.composeproject.components.NumberField
 import com.example.composeproject.data.SignUpViewModel
+import com.example.composeproject.data.model.Profile
 import com.example.composeproject.data.model.SignUpDetailsRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
@@ -48,7 +50,7 @@ import kotlinx.coroutines.launch
 fun SignUpDetailsScreen(
     navController: NavHostController,
     viewModel: SignUpViewModel,
-    onSignUpDetailsSuccess: (Int, String) -> Unit
+    onSignUpDetailsSuccess: (Int, String, Profile) -> Unit
 ) {
     val context = LocalContext.current
     val systemUiController = rememberSystemUiController()
@@ -161,10 +163,12 @@ fun SignUpDetailsScreen(
                             val response = RetrofitInstance.api.signupDetails(request)
                             val status = response.status
                             val message = response.message
+                            val profile = response.profile
 
-                            onSignUpDetailsSuccess(status, message)
+                            onSignUpDetailsSuccess(status, message, profile)
                         } catch (e: Exception) {
                             Toast.makeText(context, "Signup details failed", Toast.LENGTH_SHORT).show()
+                            Log.e("LoginError", "Login failed", e)
                         } finally {
                             loading.value = false
                         }
