@@ -70,8 +70,10 @@ fun NavigationApp() {
             composable("login") {
                 LoginScreen(
                     navController,
-                    onLoginSuccess = { status, message ->
+                    onLoginSuccess = { status, message, profile ->
                         if (status == 200) {
+                            Toast.makeText(context, profile[0].id, Toast.LENGTH_SHORT).show()
+
                             navController.navigate("home") {
                                 popUpTo("login") { inclusive = true }
                             }
