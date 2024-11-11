@@ -31,6 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.composeproject.data.ConfigViewModel
 import com.example.composeproject.data.SignUpViewModel
+import com.example.composeproject.screens.AllMessagesScreen
 import com.example.composeproject.screens.DetailsScreen
 import com.example.composeproject.screens.HomeScreen
 import com.example.composeproject.screens.LoginScreen
@@ -134,7 +135,16 @@ fun NavigationApp() {
                 )
             }
             composable("home") { HomeScreen(navController, configViewModel) }
-            composable("messages") { MessagesScreen(navController) }
+            composable("messages") {
+                MessagesScreen(
+                    navController,
+                    configViewModel
+                ) }
+            composable("allMessages") {
+                AllMessagesScreen(
+                    navController,
+                    configViewModel
+                ) }
             composable("profile") {
                 ProfileScreen(
                     navController,

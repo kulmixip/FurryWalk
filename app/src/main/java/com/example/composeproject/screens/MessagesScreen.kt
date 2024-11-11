@@ -18,13 +18,14 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.composeproject.RetrofitInstance
+import com.example.composeproject.data.ConfigViewModel
 import com.example.composeproject.data.model.NewMessageRequest
 import com.example.composeproject.navigation.BottomNavigationBar
 import kotlinx.coroutines.launch
 
 // Screen for showing a specific message between users
 @Composable
-fun MessagesScreen(navController: NavHostController) {
+fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
