@@ -9,5 +9,8 @@ import com.example.composeproject.data.ConfigViewModel
 fun AllMessagesScreen(navController: NavHostController, viewModel: ConfigViewModel) {
 
     // List of all the messages for the user
-    // var messages = viewModel.messages
+    var userId = viewModel.id
+    var conversation = viewModel.conversation
+
+
 }
