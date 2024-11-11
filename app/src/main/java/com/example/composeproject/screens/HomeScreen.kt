@@ -137,5 +137,23 @@ fun HomeScreen(
             Spacer(modifier = Modifier.width(8.dp))  // Space between icon and text
             Text(text = "Messages")
         }
+
+        // Navigation messages????
+        Row(
+            modifier = Modifier
+                .clickable {
+                    navController.navigate("allMessages")
+                }
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically  // Align icon and text vertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.AccountCircle,
+                contentDescription = "Profile Icon",
+                modifier = Modifier.size(48.dp),
+            )
+            Spacer(modifier = Modifier.width(8.dp))  // Space between icon and text
+            Text(text = "All messages")
+        }
     }
 }

@@ -1,7 +1,9 @@
 package com.example.composeproject.navigation
 
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
@@ -46,6 +48,7 @@ data class BottomNavItem(
     val icon: ImageVector
 )
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationApp() {
     val navController = rememberNavController()
@@ -70,7 +73,7 @@ fun NavigationApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "login",
+            startDestination = "home",
             Modifier.padding(innerPadding)
         ) {
             composable("login") {
