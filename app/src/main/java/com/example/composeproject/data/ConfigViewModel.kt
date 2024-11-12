@@ -35,10 +35,11 @@ class ConfigViewModel : ViewModel() {
             userId = userId,
             dogId = dogId,
             user2Id = user2Id,
-            user2IdImage = user2IdImage, // Added user2IdImage field
+            user2IdImage = user2IdImage,
             messages = messages
         )
         conversations.add(newConversation)
+        // addMessageToConversation(conversationId, Message)
     }
 
     // Add Message to list depending on conversationId
