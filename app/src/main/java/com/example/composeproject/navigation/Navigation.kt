@@ -92,6 +92,8 @@ fun NavigationApp() {
                             configViewModel.location = profile.location
                             configViewModel.image = profile.image
 
+                            // configViewmodel.conversation
+
                             navController.navigate("home") {
                                 popUpTo("login") { inclusive = true }
                             }

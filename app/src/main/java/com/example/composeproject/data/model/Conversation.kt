@@ -9,7 +9,3 @@ data class Conversation(
     val user2IdImage: String, // Image of who the conversation is with
     val messages: MutableList<Message> // All the messages between
 )
-
-fun addMessages() {
-
-}

@@ -11,7 +11,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.composeproject.data.model.Conversation
 import com.example.composeproject.data.model.Message
-import com.example.composeproject.data.model.addMessages
 import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -40,7 +39,6 @@ class ConfigViewModel : ViewModel() {
             messages = messages
         )
         conversations.add(newConversation)
-        addMessages()
     }
 
     // Add Message to list depending on conversationId
