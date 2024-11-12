@@ -6,5 +6,10 @@ data class Conversation(
     val userId: String,
     val dogId: String,
     val user2Id: String, // Who the conversation is with
-    val messages: List<Message> // All the messages between
+    val user2IdImage: String, // Image of who the conversation is with
+    val messages: MutableList<Message> // All the messages between
 )
+
+fun addMessages() {
+
+}

@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.composeproject.data.model.Conversation
 import com.example.composeproject.data.model.Message
+import com.example.composeproject.data.model.addMessages
 import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -26,43 +27,40 @@ class ConfigViewModel : ViewModel() {
     var location by mutableStateOf("")
     var rating by mutableFloatStateOf(0F)
     var description by mutableStateOf("")
+    var conversations = mutableStateListOf<Conversation>()
 
-    // Mutable state list holding all conversations
-    val _conversations = mutableStateListOf<Conversation>()
-    val conversations: List<Conversation> get() = _conversations
-
-    // Function to add a new conversation
-    fun addConversation(userId: String, user2Id: String, messages: List<Message>, dogId: String) {
+    // Creates conversation and empty Message list
+    fun addConversation(userId: String, user2Id: String, messages: MutableList<Message>, dogId: String, user2IdImage: String) {
         val newConversation = Conversation(
             conversationId = generateConversationId(),
             userId = userId,
             dogId = dogId,
             user2Id = user2Id,
+            user2IdImage = user2IdImage, // Added user2IdImage field
             messages = messages
         )
-        _conversations.add(newConversation)
+        conversations.add(newConversation)
+        addMessages()
     }
 
-    // Function to add a new message to an existing conversation
+    // Add Message to list depending on conversationId
     fun addMessageToConversation(conversationId: String, message: Message) {
-        // Find the conversation by its ID and add the new message
-        val conversation = _conversations.find { it.conversationId == conversationId }
-        conversation?.let {
-            it.messages.toMutableList().add(message)
-        }
+        val conversation = conversations.find { it.conversationId == conversationId }
+        conversation?.messages?.add(message)
     }
 
-    // Helper function to generate a conversation ID (this could be more complex in a real app)
+    // Create unique conversationId
     private fun generateConversationId(): String {
-        return "conv${_conversations.size + 1}" // Example of generating a unique ID
+        return "conv${conversations.size + 1}" // Example of generating a unique ID
     }
 
-    // Example of adding some predefined conversations with messages
+    // Constructor to add some filler data
     init {
         addConversation(
             userId = "user1",
             user2Id = "user2",
-            messages = listOf(
+            user2IdImage = "https://example.com/user2image.jpg",  // Added image URL
+            messages = mutableStateListOf(
                 Message(messageId = "msg001", senderId = "user1", content = "Hey, how are you?", dateTime = LocalDateTime.now()),
                 Message(messageId = "msg002", senderId = "user2", content = "I'm doing well, thanks! How about you?", dateTime = LocalDateTime.now())
             ),
@@ -72,10 +70,12 @@ class ConfigViewModel : ViewModel() {
         addConversation(
             userId = "user1",
             user2Id = "user3",
-            messages = listOf(
+            user2IdImage = "https://example.com/user3image.jpg",  // Added image URL
+            messages = mutableStateListOf(
                 Message(messageId = "msg003", senderId = "user1", content = "Project is going great, how about you?", dateTime = LocalDateTime.now())
             ),
             dogId = "dog002"
         )
     }
 }
+

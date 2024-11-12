@@ -2,6 +2,7 @@ package com.example.composeproject.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,16 +15,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import com.example.composeproject.data.ConfigViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AllMessagesScreen(navController: NavHostController, viewModel: ConfigViewModel) {
-    // List of conversations
-    val conversations = viewModel._conversations // Assuming this is a list of Conversation objects
+
+    val conversations = viewModel.conversations
 
     // LazyColumn to display conversations
     LazyColumn(
@@ -31,7 +34,12 @@ fun AllMessagesScreen(navController: NavHostController, viewModel: ConfigViewMod
         contentPadding = PaddingValues(16.dp)
     ) {
         items(conversations) { conversation ->
+            val imagePainter = rememberImagePainter(
+                conversation.user2IdImage,
+            )
+
             // Card for each conversation
+            // Add onclick for navigation
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -43,26 +51,27 @@ fun AllMessagesScreen(navController: NavHostController, viewModel: ConfigViewMod
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Icon of a person on the left
-                    Icon(
-                        imageVector = Icons.Filled.Person,  // Person icon from Material Design
-                        contentDescription = "User Icon",
+
+                    // Image of who the conversation is with
+                    Image(
+                        painter = imagePainter,
+                        contentDescription = "User Image",
                         modifier = Modifier
-                            .size(50.dp)
+                            .size(50.dp) // Set the size of the image
                             .padding(end = 16.dp),
-                        tint = Color.Gray  // You can change the color of the icon
+                        contentScale = ContentScale.Crop // Crop the image to fit the size
                     )
 
-                    // Column for the message preview
                     Column(
                         modifier = Modifier.weight(1f)
                     ) {
-                        // Display the user name or conversation title
-                        Text(text = "Anders")
+                        // Name of who the conversation is with
+                        Text(text = conversation.user2Id)
 
-                        // Display the last message preview
+                        // Last message in the conversation
+                        val lastMessage = conversation.messages.lastOrNull()?.content ?: "No messages yet"
                         Text(
-                            text = "This is a message",
+                            text = lastMessage,
                             color = Color.Gray
                         )
                     }
