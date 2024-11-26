@@ -37,6 +37,7 @@ import com.example.composeproject.data.SignUpViewModel
 import com.example.composeproject.data.model.Dog
 import com.example.composeproject.screens.AllMessagesScreen
 import com.example.composeproject.screens.DetailsScreen
+import com.example.composeproject.screens.DogProfile
 import com.example.composeproject.screens.HomeScreen
 import com.example.composeproject.screens.LoginScreen
 import com.example.composeproject.screens.MessagesScreen
@@ -156,6 +157,12 @@ fun NavigationApp() {
                 ) }
             composable("profile") {
                 ProfileScreen(
+                    navController,
+                    configViewModel
+                )
+            }
+            composable("dogProfile") {
+                DogProfile(
                     navController,
                     configViewModel
                 )

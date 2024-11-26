@@ -33,6 +33,7 @@ class ConfigViewModel : ViewModel() {
 
     var dogs = mutableStateListOf<Dog>()
         private set
+    var selectedDog: Dog? = null
 
     fun updateDogs(dogList: List<Dog>) {
         dogs.clear() // Clear existing data

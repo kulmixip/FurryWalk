@@ -47,6 +47,7 @@ fun HomeScreen(
     navController: NavHostController,
     viewModel: ConfigViewModel
 ) {
+
     // Main column layout
     Column(
         modifier = Modifier
@@ -123,8 +124,6 @@ fun HomeScreen(
             }
         }
 
-        Text(text = "Her kommer utlistning av bikkjer ")
-
         Spacer(modifier = Modifier.height(16.dp))
 
         Row(
@@ -139,6 +138,12 @@ fun HomeScreen(
                     modifier = Modifier
                         .size(200.dp) // Set the size of each item
                         .padding(8.dp) // Add some padding
+                        .clickable {
+                            // Set the selected dog in the ViewModel
+                            viewModel.selectedDog = dog
+                            // Navigate to the dog profile screen
+                            navController.navigate("dogProfile")
+                        }
                 ) {
                     // Load the dog's image as the background
                     AsyncImage(
@@ -158,7 +163,7 @@ fun HomeScreen(
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = dog.breed, // Display dog breed
+                            text = dog.name, // Display dog breed
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
