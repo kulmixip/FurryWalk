@@ -44,7 +44,6 @@ import com.example.composeproject.data.model.LoginRequest
 import com.example.composeproject.data.model.Profile
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
-
 @Composable
 fun LoginScreen(
     navController: NavHostController,
