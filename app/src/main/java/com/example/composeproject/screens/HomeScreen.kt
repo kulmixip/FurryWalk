@@ -1,5 +1,7 @@
 package com.example.composeproject.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +31,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,11 +46,14 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.composeproject.data.ConfigViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
     viewModel: ConfigViewModel
 ) {
+    val searchQuery = remember { mutableStateOf("") }
+
 
     // Main column layout
     Column(
@@ -78,20 +85,41 @@ fun HomeScreen(
         // Description
         Text(text = "Lorem ipsum dolor sit amet..", color = Color.Gray)
 
-        // Search Bar
-        OutlinedTextField(
-            value = "", // Current text in text field (empty)
-            onValueChange = { /* TODO: Handle search */ }, // Handle text change
-            modifier = Modifier.fillMaxWidth(), // Fill width
-            placeholder = { Text(text = "Search") }, // Placeholder text
-            shape = RoundedCornerShape(12.dp), // Round corners
-            leadingIcon = @androidx.compose.runtime.Composable { // Search icon
-                Icon(
-                    imageVector = Icons.Default.Search, // Use built-in Material Search icon
-                    contentDescription = "Search Icon"
-                )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp), // Optional padding
+            verticalAlignment = Alignment.CenterVertically // Align search bar and button vertically
+        ) {
+            // Search Bar
+            OutlinedTextField(
+                value = searchQuery.value, // Current text in text field (empty)
+                onValueChange = { newText -> searchQuery.value = newText }, // Handle text change
+                modifier = Modifier
+                    .weight(1f) // Take up remaining space in the row
+                    .padding(end = 8.dp), // Add space between the search bar and button
+                placeholder = { Text(text = "Search") }, // Placeholder text
+                shape = RoundedCornerShape(12.dp), // Round corners
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Search, // Use built-in Material Search icon
+                        contentDescription = "Search Icon"
+                    )
+                }
+            )
+
+            // Search Button
+            Button(
+                onClick = { /* TODO: Trigger search functionality */ }, // Action when button is clicked
+                modifier = Modifier
+                    .height(56.dp), // Match height of the text field for alignment
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Red),
+                shape = RoundedCornerShape(12.dp) // Optional: match the text field's rounded corners
+            ) {
+                Text(text = "Search")
             }
-        )
+        }
 
         Spacer(modifier = Modifier.height(16.dp)) // Space between search bar and category section
 
@@ -107,7 +135,7 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp) // Space out each chip
 
         ) {
-            // Creat a button for each category in the list
+            // Create a button for each category in the list
             listOf("Closest to me", "Golden Retriever", "Active", "Private", "Cat").forEach { category ->
                 Button(
                     onClick = { /* TODO: Filter by category */ }, // Action when button is clicked
