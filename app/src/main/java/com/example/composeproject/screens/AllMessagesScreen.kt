@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,22 +32,24 @@ import com.example.composeproject.data.ConfigViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AllMessagesScreen(navController: NavHostController, viewModel: ConfigViewModel) {
-
     val conversations = viewModel.conversations
 
-    // LazyColumn to display conversations
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp)
     ) {
         items(conversations) { conversation ->
+            // Get the last message (if any)
+            val lastMessage = conversation.messages.lastOrNull()
 
             // Card for each conversation
-            // Add onclick for navigation
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        navController.navigate("messages/${conversation.conversationId}")
+                    }
             ) {
                 Row(
                     modifier = Modifier
@@ -54,34 +57,33 @@ fun AllMessagesScreen(navController: NavHostController, viewModel: ConfigViewMod
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
-                    // Image of who the conversation is with
-                    Image(
-                        painter = rememberAsyncImagePainter(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(conversation.user2IdImage.ifEmpty { "https://biljard.catchmedia.no/files/furrywalk/images.jpg" })
-                                .build()
-                        ),
-                        contentDescription = "Profile Picture",
-                        contentScale = ContentScale.Crop,
+                    // Circle icon or image
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Sender Icon",
                         modifier = Modifier
                             .size(60.dp)
                             .clip(CircleShape)
                             .border(2.dp, Color.Gray, CircleShape)
+                            .padding(8.dp),
+                        tint = Color.Gray
                     )
 
                     Spacer(modifier = Modifier.width(16.dp))
 
+                    // Sender and last message column
                     Column(
                         modifier = Modifier.weight(1f)
                     ) {
-                        // Name of who the conversation is with
-                        Text(text = conversation.user2Id)
-
-                        // Last message in the conversation
-                        val lastMessage = conversation.messages.lastOrNull()?.content ?: "No messages yet"
+                        // Sender ID
                         Text(
-                            text = lastMessage,
+                            text = "Sender: ${lastMessage?.senderId ?: "Unknown"}",
+                            color = Color.Black
+                        )
+
+                        // Last message content
+                        Text(
+                            text = lastMessage?.content ?: "No messages yet",
                             color = Color.Gray
                         )
                     }
@@ -90,3 +92,6 @@ fun AllMessagesScreen(navController: NavHostController, viewModel: ConfigViewMod
         }
     }
 }
+
+
+

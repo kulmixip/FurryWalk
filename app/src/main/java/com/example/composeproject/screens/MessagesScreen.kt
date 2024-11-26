@@ -1,5 +1,6 @@
 package com.example.composeproject.screens
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -24,13 +25,25 @@ import com.example.composeproject.navigation.BottomNavigationBar
 import kotlinx.coroutines.launch
 
 // Screen for showing a specific message between users
+@SuppressLint("NewApi")
 @Composable
-fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel) {
+fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel, conversationId: String?) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
+    // Get the conversation using the conversationId
+    val conversation = viewModel.conversations.find { it.conversationId == conversationId }
+
     // State to hold the list of chat messages
     val messages = remember { mutableStateListOf<String>() }
+
+    Text(text = "$conversationId")
+
+    // Load messages for the selected conversation
+    LaunchedEffect(conversation) {
+        messages.clear()
+        conversation?.messages?.map { "${it.senderId}: ${it.content}" }?.let { messages.addAll(it) }
+    }
 
     // State to hold the current text input
     var inputText by remember { mutableStateOf(TextFieldValue("")) }
@@ -43,9 +56,9 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel)
         // Chat message list
         LazyColumn(
             modifier = Modifier
-                .weight(1f)  // Takes up the remaining space above the input
+                .weight(1f)
                 .fillMaxWidth(),
-            reverseLayout = true  // Most recent message at the bottom
+            reverseLayout = true // Most recent messages at the bottom
         ) {
             items(messages.size) { index ->
                 Text(
@@ -78,6 +91,7 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel)
                 onClick = {
                     if (inputText.text.isNotBlank()) {
                         coroutineScope.launch {
+                            // Create a new message for the conversation
                             val newMessageRequest = NewMessageRequest(
                                 userId = 1,
                                 ownerId = 2,
@@ -88,18 +102,15 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel)
 
                             try {
                                 val response = RetrofitInstance.api.sendMessage(newMessageRequest)
-                                val status = response.status
-                                val message = response.message
-
-                                if(status == 200){
-                                    messages.add(0, inputText.text)  // Add message to the top of the list
+                                if (response.status == 200) {
+                                    messages.add(0, "You: ${inputText.text}")
                                     inputText = TextFieldValue("")
                                 } else {
-                                    Toast.makeText(context, "Login Failed: $message", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Send Failed: ${response.message}", Toast.LENGTH_SHORT).show()
                                 }
                             } catch (e: Exception) {
-                                Toast.makeText(context, "Login Failed: ${e.message}", Toast.LENGTH_SHORT).show()
-                                Log.e("LoginError", "Login failed", e)
+                                Toast.makeText(context, "Send Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                                Log.e("SendError", "Message sending failed", e)
                             }
                         }
                     } else {

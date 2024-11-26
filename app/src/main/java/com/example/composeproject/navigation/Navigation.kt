@@ -144,11 +144,12 @@ fun NavigationApp() {
                 )
             }
             composable("home") { HomeScreen(navController, configViewModel) }
-            composable("messages") {
-                MessagesScreen(
-                    navController,
-                    configViewModel
-                ) }
+            composable("messages/{conversationId}") { backStackEntry ->
+                val conversationId = backStackEntry.arguments?.getString("conversationId")
+                MessagesScreen(navController, configViewModel, conversationId)
+            }
+
+
             composable("allMessages") {
                 AllMessagesScreen(
                     navController,
@@ -175,7 +176,7 @@ fun BottomNavigationBar(navController: NavController) {
     NavigationBar {
         val items = listOf(
             BottomNavItem("home", "Home", Icons.Default.Home),
-            BottomNavItem("messages", "Messages", Icons.Default.MailOutline),
+            BottomNavItem("allMessages", "Messages", Icons.Default.MailOutline),
             BottomNavItem("profile", "Profile", Icons.Default.Person)
         )
         items.forEach { item ->
