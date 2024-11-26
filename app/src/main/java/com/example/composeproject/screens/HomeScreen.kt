@@ -59,17 +59,6 @@ fun HomeScreen(
     val searchQuery = remember { mutableStateOf("") }
     val filteredDogs = remember { mutableStateListOf<Dog>() }
 
-    filteredDogs.clear()
-    filteredDogs.addAll()
-    if (searchQuery.value.isEmpty()) {
-        viewModel.dogs
-    } else {
-        viewModel.dogs.filter { dog ->
-            dog.breed
-        }
-    }
-
-
     // Main column layout
     Column(
         modifier = Modifier
