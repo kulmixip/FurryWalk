@@ -3,6 +3,7 @@ package com.example.composeproject.screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,12 +32,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.composeproject.data.ConfigViewModel
 
 @Composable
@@ -122,21 +125,43 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth() // Full width of row
+                .horizontalScroll(rememberScrollState()), // Enable horizontal scrolling
+            horizontalArrangement = Arrangement.spacedBy(8.dp) // Space out each item
         ) {
-            if (viewModel.dogs.isEmpty()) {
-                item {
-                    Text(
-                        text = "No dogs available",
-                        modifier = Modifier.padding(16.dp),
-                        color = Color.Gray
+            viewModel.dogs.forEach { dog ->
+                // Each dog item is wrapped in a Box for the background image and text on top
+                Box(
+                    modifier = Modifier
+                        .size(200.dp) // Set the size of each item
+                        .padding(8.dp) // Add some padding
+                ) {
+                    // Load the dog's image as the background
+                    AsyncImage(
+                        model = dog.image, // Assuming `imageUrl` is the field in your `Dog` data model
+                        contentDescription = "Dog Image",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop // Crop image to fit
                     )
-                }
-            } else {
-                items(viewModel.dogs) { dog ->
-                    Text(text = dog.breed)
+
+                    // Overlay text on top of the image
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = dog.breed, // Display dog breed
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                        )
+                    }
                 }
             }
         }
