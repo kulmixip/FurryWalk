@@ -31,8 +31,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,6 +47,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.composeproject.data.ConfigViewModel
+import com.example.composeproject.data.model.Dog
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -53,6 +57,17 @@ fun HomeScreen(
     viewModel: ConfigViewModel
 ) {
     val searchQuery = remember { mutableStateOf("") }
+    val filteredDogs = remember { mutableStateListOf<Dog>() }
+
+    filteredDogs.clear()
+    filteredDogs.addAll()
+    if (searchQuery.value.isEmpty()) {
+        viewModel.dogs
+    } else {
+        viewModel.dogs.filter { dog ->
+            dog.breed
+        }
+    }
 
 
     // Main column layout
