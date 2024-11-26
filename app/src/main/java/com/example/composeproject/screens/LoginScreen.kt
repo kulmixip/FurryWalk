@@ -40,6 +40,7 @@ import com.example.composeproject.R
 import com.example.composeproject.RetrofitInstance
 import com.example.composeproject.components.InputField
 import com.example.composeproject.data.ConfigViewModel
+import com.example.composeproject.data.model.Dog
 import com.example.composeproject.data.model.LoginRequest
 import com.example.composeproject.data.model.Profile
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -48,7 +49,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     navController: NavHostController,
-    onLoginSuccess: (Int, String, Profile) -> Unit
+    onLoginSuccess: (Int, String, Profile, List<Dog>) -> Unit
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -129,8 +130,9 @@ fun LoginScreen(
                             val status = response.status
                             val message = response.message
                             val profile = response.profile
+                            val dogs = response.dogs
 
-                            onLoginSuccess(status, message, profile)
+                            onLoginSuccess(status, message, profile, dogs)
                         } catch (e: Exception) {
                             Toast.makeText(context, "Login Failed: ${e.message}", Toast.LENGTH_SHORT).show()
                             Log.e("LoginError", "Login failed", e)

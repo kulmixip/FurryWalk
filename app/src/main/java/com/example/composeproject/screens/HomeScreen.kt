@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -119,6 +121,25 @@ fun HomeScreen(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            if (viewModel.dogs.isEmpty()) {
+                item {
+                    Text(
+                        text = "No dogs available",
+                        modifier = Modifier.padding(16.dp),
+                        color = Color.Gray
+                    )
+                }
+            } else {
+                items(viewModel.dogs) { dog ->
+                    Text(text = dog.breed)
+                }
+            }
+        }
 
         // Navigation messages????
         Row(

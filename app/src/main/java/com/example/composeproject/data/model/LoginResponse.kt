@@ -4,5 +4,6 @@ data class LoginResponse(
     val status: Int,
     val message: String,
     //val profileId: Int
-    val profile: Profile
+    val profile: Profile,
+    val dogs: List<Dog>
 )

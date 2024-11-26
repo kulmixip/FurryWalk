@@ -9,7 +9,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.composeproject.RetrofitInstance
 import com.example.composeproject.data.model.Conversation
+import com.example.composeproject.data.model.Dog
 import com.example.composeproject.data.model.Message
 import java.time.LocalDateTime
 
@@ -27,6 +30,14 @@ class ConfigViewModel : ViewModel() {
     var rating by mutableFloatStateOf(0F)
     var description by mutableStateOf("")
     var conversations = mutableStateListOf<Conversation>()
+
+    var dogs = mutableStateListOf<Dog>()
+        private set
+
+    fun updateDogs(dogList: List<Dog>) {
+        dogs.clear() // Clear existing data
+        dogs.addAll(dogList) // Add new data
+    }
 
     // Creates conversation and empty Message list
     fun addConversation(userId: String, user2Id: String, messages: MutableList<Message>, dogId: String, user2IdImage: String) {

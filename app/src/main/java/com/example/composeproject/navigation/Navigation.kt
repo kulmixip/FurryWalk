@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -33,6 +34,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.composeproject.data.ConfigViewModel
 import com.example.composeproject.data.SignUpViewModel
+import com.example.composeproject.data.model.Dog
 import com.example.composeproject.screens.AllMessagesScreen
 import com.example.composeproject.screens.DetailsScreen
 import com.example.composeproject.screens.HomeScreen
@@ -73,13 +75,13 @@ fun NavigationApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "login",
             Modifier.padding(innerPadding)
         ) {
             composable("login") {
                 LoginScreen(
                     navController,
-                    onLoginSuccess = { status, message, profile ->
+                    onLoginSuccess = { status, message, profile, dogs ->
                         if (status == 200) {
                             //Toast.makeText(context, "Profile ID: ${profile.id}", Toast.LENGTH_SHORT).show()
                             configViewModel.id = profile.id
@@ -91,6 +93,8 @@ fun NavigationApp() {
                             configViewModel.rating = profile.rating
                             configViewModel.location = profile.location
                             configViewModel.image = profile.image
+
+                            configViewModel.updateDogs(dogs)
 
                             // configViewmodel.conversation
 
