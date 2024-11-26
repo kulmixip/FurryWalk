@@ -49,7 +49,6 @@ import coil.compose.AsyncImage
 import com.example.composeproject.data.ConfigViewModel
 import com.example.composeproject.data.model.Dog
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
@@ -58,6 +57,12 @@ fun HomeScreen(
 ) {
     val searchQuery = remember { mutableStateOf("") }
     val filteredDogs = remember { mutableStateListOf<Dog>() }
+
+    val onSearchClick: () -> Unit = {
+        val searchResults = viewModel.searchDogs(searchQuery.value)
+        filteredDogs.clear()
+        filteredDogs.addAll(searchResults)
+    }
 
     // Main column layout
     Column(
@@ -114,7 +119,7 @@ fun HomeScreen(
 
             // Search Button
             Button(
-                onClick = { /* TODO: Trigger search functionality */ }, // Action when button is clicked
+                onClick = onSearchClick, // Action when button is clicked
                 modifier = Modifier
                     .height(56.dp), // Match height of the text field for alignment
                 colors = ButtonDefaults.buttonColors(
@@ -124,6 +129,54 @@ fun HomeScreen(
                 Text(text = "Search")
             }
         }
+
+        // Her skal utlistningen etter søk komme
+        if (filteredDogs.isNotEmpty()) {
+            Text(text = "Found ${filteredDogs.size} result(s)")
+
+            // List of filtered dogs
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(filteredDogs) { dog ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp) // Set a height for each dog box
+                            .padding(8.dp) // Padding around each dog box
+                    ) {
+                        // Replace with actual dog image and details
+                        AsyncImage(
+                            model = dog.image, // Assuming dog.image is a URL or Image
+                            contentDescription = dog.name,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop // Crop to fit
+                        )
+
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = dog.breed, // Display the breed of the dog
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
+                            Text(
+                                text = dog.name, // Display the dog's name
+                                color = Color.White,
+                                fontSize = 16.sp
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
 
         Spacer(modifier = Modifier.height(16.dp)) // Space between search bar and category section
 
