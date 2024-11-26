@@ -120,6 +120,8 @@ fun HomeScreen(
             }
         }
 
+        Text(text = "Her kommer utlistning av bikkjer ")
+
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn(
