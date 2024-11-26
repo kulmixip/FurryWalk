@@ -30,7 +30,9 @@ class ConfigViewModel : ViewModel() {
     var location by mutableStateOf("")
     var rating by mutableFloatStateOf(0F)
     var description by mutableStateOf("")
+
     var conversations = mutableStateListOf<Conversation>()
+        private set
 
     var dogs = mutableStateListOf<Dog>()
         private set
@@ -39,6 +41,11 @@ class ConfigViewModel : ViewModel() {
     fun updateDogs(dogList: List<Dog>) {
         dogs.clear() // Clear existing data
         dogs.addAll(dogList) // Add new data
+    }
+
+    fun updateConversations(conversationList: List<Conversation>) {
+        conversations.clear()
+        conversations.addAll(conversationList)
     }
 
     // Function to filter dogs based on search query
@@ -51,53 +58,6 @@ class ConfigViewModel : ViewModel() {
         }
     }
 
-    // Creates conversation and empty Message list
-    fun addConversation(userId: String, user2Id: String, messages: MutableList<Message>, dogId: String, user2IdImage: String) {
-        val newConversation = Conversation(
-            conversationId = generateConversationId(),
-            userId = userId,
-            dogId = dogId,
-            user2Id = user2Id,
-            user2IdImage = user2IdImage,
-            messages = messages
-        )
-        conversations.add(newConversation)
-        // addMessageToConversation(conversationId, Message)
-    }
 
-    // Add Message to list depending on conversationId
-    fun addMessageToConversation(conversationId: String, message: Message) {
-        val conversation = conversations.find { it.conversationId == conversationId }
-        conversation?.messages?.add(message)
-    }
-
-    // Create unique conversationId
-    private fun generateConversationId(): String {
-        return "conv${conversations.size + 1}" // Example of generating a unique ID
-    }
-
-    // Constructor to add some filler data
-    init {
-        addConversation(
-            userId = "user1",
-            user2Id = "user2",
-            user2IdImage = "https://example.com/user2image.jpg",  // Added image URL
-            messages = mutableStateListOf(
-                Message(messageId = "msg001", senderId = "user1", content = "Hey, how are you?", dateTime = LocalDateTime.now()),
-                Message(messageId = "msg002", senderId = "user2", content = "I'm doing well, thanks! How about you?", dateTime = LocalDateTime.now())
-            ),
-            dogId = "dog001"
-        )
-
-        addConversation(
-            userId = "user1",
-            user2Id = "user3",
-            user2IdImage = "https://example.com/user3image.jpg",  // Added image URL
-            messages = mutableStateListOf(
-                Message(messageId = "msg003", senderId = "user1", content = "Project is going great, how about you?", dateTime = LocalDateTime.now())
-            ),
-            dogId = "dog002"
-        )
-    }
 }
 

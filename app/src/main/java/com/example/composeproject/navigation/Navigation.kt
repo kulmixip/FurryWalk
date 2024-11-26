@@ -82,7 +82,7 @@ fun NavigationApp() {
             composable("login") {
                 LoginScreen(
                     navController,
-                    onLoginSuccess = { status, message, profile, dogs ->
+                    onLoginSuccess = { status, message, profile, dogs, conversations ->
                         if (status == 200) {
                             //Toast.makeText(context, "Profile ID: ${profile.id}", Toast.LENGTH_SHORT).show()
                             configViewModel.id = profile.id
@@ -96,8 +96,7 @@ fun NavigationApp() {
                             configViewModel.image = profile.image
 
                             configViewModel.updateDogs(dogs)
-
-                            // configViewmodel.conversation
+                            configViewModel.updateConversations(conversations)
 
                             navController.navigate("home") {
                                 popUpTo("login") { inclusive = true }
