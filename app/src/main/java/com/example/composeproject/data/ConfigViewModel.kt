@@ -14,6 +14,7 @@ import com.example.composeproject.RetrofitInstance
 import com.example.composeproject.data.model.Conversation
 import com.example.composeproject.data.model.Dog
 import com.example.composeproject.data.model.Message
+import retrofit2.http.Query
 import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -38,6 +39,16 @@ class ConfigViewModel : ViewModel() {
     fun updateDogs(dogList: List<Dog>) {
         dogs.clear() // Clear existing data
         dogs.addAll(dogList) // Add new data
+    }
+
+    // Function to filter dogs based on search query
+    fun searchDogs(query: String): List<Dog> {
+        return dogs.filter { dog ->
+            dog.name.contains(query, ignoreCase = true)
+            dog.description.contains(query, ignoreCase = true)
+            dog.breed.contains(query, ignoreCase = true)
+            dog.color.contains(query, ignoreCase = true)
+        }
     }
 
     // Creates conversation and empty Message list
