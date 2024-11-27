@@ -189,7 +189,7 @@ fun HomeScreen(
 
         ) {
             // Liste med aktivitetsnivå-kategorier
-            val activityLevels = listOf("Low", "Middels", "High")
+            val activityLevels = listOf("Lav", "Middels", "Høy")
 
             Row(
                 modifier = Modifier
@@ -207,9 +207,9 @@ fun HomeScreen(
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = when (level) {
-                                "Low" -> Color.Green
+                                "Lav" -> Color.Green
                                 "Middels" -> Color.Yellow
-                                "High" -> Color.Red
+                                "Høy" -> Color.Red
                                 else -> Color.LightGray
                             }
                         ),
