@@ -51,9 +51,9 @@ class ConfigViewModel : ViewModel() {
     // Function to filter dogs based on search query
     fun searchDogs(query: String): List<Dog> {
         return dogs.filter { dog ->
-            dog.name.contains(query, ignoreCase = true)
-            dog.description.contains(query, ignoreCase = true)
-            dog.breed.contains(query, ignoreCase = true)
+            dog.name.contains(query, ignoreCase = true) ||
+            dog.description.contains(query, ignoreCase = true) ||
+            dog.breed.contains(query, ignoreCase = true) ||
             dog.color.contains(query, ignoreCase = true)
         }
     }
