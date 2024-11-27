@@ -48,7 +48,7 @@ fun AllMessagesScreen(navController: NavHostController, viewModel: ConfigViewMod
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
                     .clickable {
-                        navController.navigate("messages/${conversation.conversationId}")
+                        navController.navigate("messages/${conversation.id}")
                     }
             ) {
                 Row(

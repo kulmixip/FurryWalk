@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.composeproject.RetrofitInstance
@@ -32,7 +33,7 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
     val coroutineScope = rememberCoroutineScope()
 
     // Get the conversation using the conversationId
-    val conversation = viewModel.conversations.find { it.conversationId == conversationId }
+    val conversation = viewModel.conversations.find { it.id.toString() == conversationId }
 
     // State to hold the list of chat messages
     val messages = remember { mutableStateListOf<String>() }
@@ -61,6 +62,7 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
             reverseLayout = true // Most recent messages at the bottom
         ) {
             items(messages.size) { index ->
+                Text(text = "hello")
                 Text(
                     text = messages[index],
                     modifier = Modifier.padding(8.dp),
@@ -68,6 +70,17 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                 )
             }
         }
+
+//        Button(
+//            onClick = {
+//                Log.d("MessagesScreen", "Current messages: $messages")
+//            },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(vertical = 8.dp)
+//        ) {
+//            Text(text = "Log Messages")
+//        }
 
         // Input field and Send button
         Row(
