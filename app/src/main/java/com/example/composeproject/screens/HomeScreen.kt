@@ -76,19 +76,6 @@ fun HomeScreen(
         horizontalAlignment = Alignment.Start, // Align content to the start horizontally
         verticalArrangement = Arrangement.spacedBy(16.dp) // Add consistent spacing between items
     ) {
-        // Top bar ROW with filter
-        Row(
-            modifier = Modifier.fillMaxWidth(), // Make row fill width
-            horizontalArrangement = Arrangement.SpaceBetween, // Space out elements in the row
-            verticalAlignment = Alignment.CenterVertically // Center items vertically in the row
-        ) {
-            IconButton(onClick = { /* TODO: Open filter */ }) { // Button to open filter
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Filter Icon"
-                )
-            }
-        }
 
         Text(text = "Velkommen " + viewModel.firstName + ' ' + viewModel.lastName)
 
@@ -186,7 +173,11 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(16.dp)) // Space between search bar and category section
 
         // Category
-        Text(text = "What are you looking for?", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Text(
+            text = "What activity level do you want?",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
         Spacer(modifier = Modifier.height(2.dp))
 
         // Horizontal scrollable row for categories
@@ -197,112 +188,125 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp) // Space out each chip
 
         ) {
-            // Create a button for each category in the list
-            listOf(
-                "Closest to me",
-                "Golden Retriever",
-                "Active",
-                "Private",
-                "Cat"
-            ).forEach { category ->
-                Button(
-                    onClick = { /* TODO: Filter by category */ }, // Action when button is clicked
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (category == "Golden Retriever") Color.Red else Color.LightGray
-                    ),
-                    shape = CircleShape // Make button round
-                ) {
-                    Text(
-                        text = category,
-                        color = if (category == "Golden Retriever") Color.White else Color.Black
-                    )
-                }
-            }
-        }
+            // Liste med aktivitetsnivå-kategorier
+            val activityLevels = listOf("Low", "Middels", "High")
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth() // Full width of row
-                .horizontalScroll(rememberScrollState()), // Enable horizontal scrolling
-            horizontalArrangement = Arrangement.spacedBy(8.dp) // Space out each item
-        ) {
-            viewModel.dogs.forEach { dog ->
-                // Each dog item is wrapped in a Box for the background image and text on top
-                Box(
-                    modifier = Modifier
-                        .size(200.dp) // Set the size of each item
-                        .padding(8.dp) // Add some padding
-                        .clickable {
-                            // Set the selected dog in the ViewModel
-                            viewModel.selectedDog = dog
-                            // Navigate to the dog profile screen
-                            navController.navigate("dogProfile")
-                        }
-                ) {
-                    // Load the dog's image as the background
-                    AsyncImage(
-                        model = dog.image, // Assuming `imageUrl` is the field in your `Dog` data model
-                        contentDescription = "Dog Image",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop // Crop image to fit
-                    )
-
-                    // Overlay text on top of the image
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()), // Gjør raden rullbar horisontalt
+                horizontalArrangement = Arrangement.spacedBy(8.dp) // Avstand mellom knappene
+            ) {
+                activityLevels.forEach { level ->
+                    Button(
+                        onClick = {
+                            // Filtrer hunder basert på aktivitetsnivå
+                            val filteredByActivity = viewModel.filterDogsByActivity(level)
+                            filteredDogs.clear()
+                            filteredDogs.addAll(filteredByActivity)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = when (level) {
+                                "Low" -> Color.Green
+                                "Middels" -> Color.Yellow
+                                "High" -> Color.Red
+                                else -> Color.LightGray
+                            }
+                        ),
+                        shape = CircleShape // Runde knapper
                     ) {
                         Text(
-                            text = dog.name, // Display dog breed
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
+                            text = level,
+                            color = Color.White
                         )
                     }
                 }
             }
-        }
 
-        // Navigation messages????
-        Row(
-            modifier = Modifier
-                .clickable {
-                    navController.navigate("messages")
-                }
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically  // Align icon and text vertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.AccountCircle,
-                contentDescription = "Profile Icon",
-                modifier = Modifier.size(48.dp),
-            )
-            Spacer(modifier = Modifier.width(8.dp))  // Space between icon and text
-            Text(text = "Messages")
-        }
+            Spacer(modifier = Modifier.height(16.dp))
 
-        // Navigation messages????
-        Row(
-            modifier = Modifier
-                .clickable {
-                    navController.navigate("allMessages")
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth() // Full width of row
+                    .horizontalScroll(rememberScrollState()), // Enable horizontal scrolling
+                horizontalArrangement = Arrangement.spacedBy(8.dp) // Space out each item
+            ) {
+                viewModel.dogs.forEach { dog ->
+                    // Each dog item is wrapped in a Box for the background image and text on top
+                    Box(
+                        modifier = Modifier
+                            .size(200.dp) // Set the size of each item
+                            .padding(8.dp) // Add some padding
+                            .clickable {
+                                // Set the selected dog in the ViewModel
+                                viewModel.selectedDog = dog
+                                // Navigate to the dog profile screen
+                                navController.navigate("dogProfile")
+                            }
+                    ) {
+                        // Load the dog's image as the background
+                        AsyncImage(
+                            model = dog.image, // Assuming `imageUrl` is the field in your `Dog` data model
+                            contentDescription = "Dog Image",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop // Crop image to fit
+                        )
+
+                        // Overlay text on top of the image
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = dog.name, // Display dog breed
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
                 }
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically  // Align icon and text vertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.AccountCircle,
-                contentDescription = "Profile Icon",
-                modifier = Modifier.size(48.dp),
-            )
-            Spacer(modifier = Modifier.width(8.dp))  // Space between icon and text
-            Text(text = "All messages")
+            }
+
+            // Navigation messages????
+            Row(
+                modifier = Modifier
+                    .clickable {
+                        navController.navigate("messages")
+                    }
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically  // Align icon and text vertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = "Profile Icon",
+                    modifier = Modifier.size(48.dp),
+                )
+                Spacer(modifier = Modifier.width(8.dp))  // Space between icon and text
+                Text(text = "Messages")
+            }
+
+            // Navigation messages????
+            Row(
+                modifier = Modifier
+                    .clickable {
+                        navController.navigate("allMessages")
+                    }
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically  // Align icon and text vertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = "Profile Icon",
+                    modifier = Modifier.size(48.dp),
+                )
+                Spacer(modifier = Modifier.width(8.dp))  // Space between icon and text
+                Text(text = "All messages")
+            }
         }
     }
-}
+    }

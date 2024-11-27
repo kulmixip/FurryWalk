@@ -57,7 +57,10 @@ class ConfigViewModel : ViewModel() {
             dog.color.contains(query, ignoreCase = true)
         }
     }
-
-
+    fun filterDogsByActivity(activityLevel: String): List<Dog> {
+        return dogs.filter { dog ->
+            dog.activity.equals(activityLevel, ignoreCase = true)
+        }
+    }
 }
 
