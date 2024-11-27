@@ -1,7 +1,6 @@
 package com.example.composeproject.screens
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -60,10 +59,7 @@ fun HomeScreen(
     val filteredDogs = remember { mutableStateListOf<Dog>() }
 
     val onSearchClick: () -> Unit = {
-        val query = searchQuery.value.trim()
-        Log.d("Homescreen", "searchQuery: $query")
-        val searchResults = viewModel.searchDogs(query)
-        Log.d("Homescreen", "searchResults: ${viewModel.searchDogs(searchQuery.value)}")
+        val searchResults = viewModel.searchDogs(searchQuery.value)
         filteredDogs.clear()
         filteredDogs.addAll(searchResults)
     }
