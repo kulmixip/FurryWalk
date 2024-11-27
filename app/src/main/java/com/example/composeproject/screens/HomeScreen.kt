@@ -123,15 +123,17 @@ fun HomeScreen(
                 modifier = Modifier
                     .height(56.dp), // Match height of the text field for alignment
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red),
+                    containerColor = Color.Red
+                ),
                 shape = RoundedCornerShape(12.dp) // Optional: match the text field's rounded corners
             ) {
                 Text(text = "Search")
             }
         }
 
-        // Her skal utlistningen etter søk komme
-        if (filteredDogs.isNotEmpty()) {
+        if (filteredDogs.isEmpty()) {
+            Text(text = "Found 0 results", color = Color.Gray)
+        } else {
             Text(text = "Found ${filteredDogs.size} result(s)")
 
             // List of filtered dogs
@@ -153,7 +155,6 @@ fun HomeScreen(
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop // Crop to fit
                         )
-
                         Column(
                             modifier = Modifier
                                 .align(Alignment.Center)
@@ -193,7 +194,13 @@ fun HomeScreen(
 
         ) {
             // Create a button for each category in the list
-            listOf("Closest to me", "Golden Retriever", "Active", "Private", "Cat").forEach { category ->
+            listOf(
+                "Closest to me",
+                "Golden Retriever",
+                "Active",
+                "Private",
+                "Cat"
+            ).forEach { category ->
                 Button(
                     onClick = { /* TODO: Filter by category */ }, // Action when button is clicked
                     colors = ButtonDefaults.buttonColors(
