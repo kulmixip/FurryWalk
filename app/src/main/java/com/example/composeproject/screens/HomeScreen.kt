@@ -172,56 +172,7 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp)) // Space between search bar and category section
 
-        // Category
-        Text(
-            text = "What activity level do you want?",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(2.dp))
 
-        // Horizontal scrollable row for categories
-        Row(
-            modifier = Modifier
-                .fillMaxWidth() // Full width of row
-                .horizontalScroll(rememberScrollState()), // Enable horizontal scrolling
-            horizontalArrangement = Arrangement.spacedBy(8.dp) // Space out each chip
-
-        ) {
-            // Liste med aktivitetsnivå-kategorier
-            val activityLevels = listOf("Lav", "Middels", "Høy")
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()), // Gjør raden rullbar horisontalt
-                horizontalArrangement = Arrangement.spacedBy(8.dp) // Avstand mellom knappene
-            ) {
-                activityLevels.forEach { level ->
-                    Button(
-                        onClick = {
-                            // Filtrer hunder basert på aktivitetsnivå
-                            val filteredByActivity = viewModel.filterDogsByActivity(level)
-                            filteredDogs.clear()
-                            filteredDogs.addAll(filteredByActivity)
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = when (level) {
-                                "Lav" -> Color.Green
-                                "Middels" -> Color.Yellow
-                                "Høy" -> Color.Red
-                                else -> Color.LightGray
-                            }
-                        ),
-                        shape = CircleShape // Runde knapper
-                    ) {
-                        Text(
-                            text = level,
-                            color = Color.White
-                        )
-                    }
-                }
-            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -308,5 +259,4 @@ fun HomeScreen(
                 Text(text = "All messages")
             }
         }
-    }
     }
