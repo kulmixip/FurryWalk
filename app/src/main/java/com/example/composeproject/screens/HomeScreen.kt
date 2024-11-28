@@ -80,10 +80,10 @@ fun HomeScreen(
         Text(text = "Velkommen " + viewModel.firstName + ' ' + viewModel.lastName)
 
         // Title
-        Text(text = "Pet near you", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Furry friends near you", fontSize = 28.sp, fontWeight = FontWeight.Bold)
 
         // Description
-        Text(text = "Lorem ipsum dolor sit amet..", color = Color.Gray)
+        Text(text = "Find your favorite dog, and take a walk today", color = Color.Gray)
 
         Row(
             modifier = Modifier
@@ -113,7 +113,7 @@ fun HomeScreen(
                 onClick = onSearchClick, // Action when button is clicked
                 modifier = Modifier
                     .height(56.dp), // Match height of the text field for alignment
-                colors = ButtonDefaults.buttonColors(
+            colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Red
                 ),
                 shape = RoundedCornerShape(12.dp) // Optional: match the text field's rounded corners
@@ -169,12 +169,67 @@ fun HomeScreen(
             }
         }
 
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        {
+            Text(text = "Choose your activity level", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+        }
 
-        Spacer(modifier = Modifier.height(16.dp)) // Space between search bar and category section
+
+        // In this row i want to have a sort function that is sorting on low, middel or high activitylevel!
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()), // Enable horizontal scrolling if needed
+            horizontalArrangement = Arrangement.spacedBy(8.dp) // Space out each button
+        ) {
+            val sortDogsByActivityLevel: (String) -> Unit = { level ->
+                filteredDogs.clear()
+                if (level == "All") {
+                    filteredDogs.addAll(viewModel.dogs)
+                } else {
+                    filteredDogs.addAll(viewModel.dogs.filter { it.activity.equals(level, ignoreCase = true) })
+                }
+            }
+
+            // Sorting buttons
+            Button(
+                onClick = { sortDogsByActivityLevel("Low") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(text = "Low Activity")
+            }
+
+            Button(
+                onClick = { sortDogsByActivityLevel("Normal") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(text = "Normal Activity")
+            }
+
+            Button(
+                onClick = { sortDogsByActivityLevel("High") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(text = "High Activity")
+            }
+
+            Button(
+                onClick = { sortDogsByActivityLevel("All") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(text = "All")
+            }
+        }
 
 
-
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(2.dp)) // Space between category and all dogs
 
             Row(
                 modifier = Modifier
@@ -183,6 +238,7 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp) // Space out each item
             ) {
                 viewModel.dogs.forEach { dog ->
+
                     // Each dog item is wrapped in a Box for the background image and text on top
                     Box(
                         modifier = Modifier
