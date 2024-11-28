@@ -90,28 +90,18 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                         coroutineScope.launch {
 
                             // Create a new message for the conversation
-                            val newMessageRequest = conversation?.let {
-                                NewMessageRequest(
-                                    userId = conversation.user_id,
-                                    ownerId = 2, // Hvordan finne dette?
-                                    dogId = conversation.dog_id,
-                                    message = inputText.text,
-                                    sentby = conversation.user_id
-                                )
-                            }
-
-                            Toast.makeText(context, "lol", Toast.LENGTH_SHORT).show()
-                            Text(text = "${conversation.user_id}")
-                            Text(text = "${conversation.dog_id}")
-
+                            val request =  NewMessageRequest(
+                                userId = viewModel.id.toString(),
+                                ownerId = 2, // Hvordan finne dette?
+                                dogId = conversation?.dog_id.toString(),
+                                message = inputText.text,
+                                sentby = viewModel.id.toString()
+                            )
 
 
                             try {
-                                val response = newMessageRequest?.let {
-                                    RetrofitInstance.api.sendMessage(
-                                        it
-                                    )
-                                }
+                                val response = RetrofitInstance.api.sendMessage(request);
+
                                 if (response != null) {
                                     if (response.status == 200) {
                                         // Legg til navn, sett på bunnen
