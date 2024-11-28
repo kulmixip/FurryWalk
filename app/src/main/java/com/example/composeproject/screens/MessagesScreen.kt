@@ -100,6 +100,12 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                                 )
                             }
 
+                            Toast.makeText(context, "lol", Toast.LENGTH_SHORT).show()
+                            Text(text = "${conversation.user_id}")
+                            Text(text = "${conversation.dog_id}")
+
+
+
                             try {
                                 val response = newMessageRequest?.let {
                                     RetrofitInstance.api.sendMessage(
@@ -116,6 +122,10 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                                     } else {
                                         Toast.makeText(context, "Send Failed: ${response.message}", Toast.LENGTH_SHORT).show()
                                     }
+                                }
+                                else {
+                                    Toast.makeText(context, "yolo", Toast.LENGTH_SHORT).show()
+
                                 }
                             } catch (e: Exception) {
                                 Toast.makeText(context, "Send Failed: ${e.message}", Toast.LENGTH_SHORT).show()

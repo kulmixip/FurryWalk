@@ -124,10 +124,10 @@ fun DogProfile(
 
                         // Message icon button
                         IconButton(
-                            onClick = { navController.navigate("messages") }, // Navigate to the "newMessage" screen
+                            onClick = { navController.navigate("messages/${null}") }, // Navigate to the "newMessage" screen
                             modifier = Modifier
                                 .align(Alignment.CenterEnd) // Align the icon to the end
-                                .padding(end = 65.dp)
+                                .padding(end = 75.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.MailOutline,
