@@ -38,7 +38,12 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
     // State to hold the list of chat messages
     val messages = remember { mutableStateListOf<String>() }
 
-    Text(text = "$conversationId")
+
+/*    // Krasjer når jeg prøver å hente dogId, userId osv fra spesifikke samtalen, why?
+    if (conversation != null) {
+        Text(text = conversation.dogId)
+    }*/
+
 
     // Load messages for the selected conversation
     LaunchedEffect(conversation) {
@@ -62,7 +67,6 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
             reverseLayout = true // Most recent messages at the bottom
         ) {
             items(messages.size) { index ->
-                Text(text = "hello")
                 Text(
                     text = messages[index],
                     modifier = Modifier.padding(8.dp),
@@ -104,7 +108,9 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                 onClick = {
                     if (inputText.text.isNotBlank()) {
                         coroutineScope.launch {
+
                             // Create a new message for the conversation
+                            // Må endres til det blir lagt til riktig conversation.id osv
                             val newMessageRequest = NewMessageRequest(
                                 userId = 1,
                                 ownerId = 2,
