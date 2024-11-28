@@ -32,6 +32,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -91,7 +93,7 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.Center
 
         ) {
-            Text(text = "Welcome " + viewModel.firstName + ' ' + viewModel.lastName,
+            Text(text = "Welcome, " + viewModel.firstName + ' ' + viewModel.lastName,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium)
         }
@@ -145,8 +147,7 @@ fun HomeScreen(
                 onClick = onSearchClick, // Action when button is clicked
                 modifier = Modifier
                     .height(56.dp), // Match height of the text field for alignment
-            colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary,
                 ),
                 shape = RoundedCornerShape(12.dp) // Optional: match the text field's rounded corners
             ) {
@@ -210,7 +211,7 @@ fun HomeScreen(
                 .fillMaxWidth()
         )
         {
-            Text(text = "Choose your activity level", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+            Text(text = "Sort on activity level", fontSize = 22.sp, fontWeight = FontWeight.Bold)
         }
 
 
@@ -233,7 +234,7 @@ fun HomeScreen(
             // Sorting buttons
             Button(
                 onClick = { sortDogsByActivityLevel("Low") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(text = "Low Activity")
@@ -241,7 +242,7 @@ fun HomeScreen(
 
             Button(
                 onClick = { sortDogsByActivityLevel("Normal") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(text = "Normal Activity")
@@ -249,7 +250,7 @@ fun HomeScreen(
 
             Button(
                 onClick = { sortDogsByActivityLevel("High") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(text = "High Activity")
@@ -257,7 +258,7 @@ fun HomeScreen(
 
             Button(
                 onClick = { sortDogsByActivityLevel("All") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(text = "All")
@@ -293,7 +294,8 @@ fun HomeScreen(
                         AsyncImage(
                             model = dog.image, // Assuming `imageUrl` is the field in your `Dog` data model
                             contentDescription = "Dog Image",
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier.fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp)), // Gjør hjørnene avrundede
                             contentScale = ContentScale.Crop // Crop image to fit
                         )
 
