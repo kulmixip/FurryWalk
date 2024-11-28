@@ -3,6 +3,7 @@ package com.example.composeproject.screens
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -47,6 +49,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter.State.Empty.painter
+import coil.compose.rememberAsyncImagePainter
+import com.example.composeproject.R
 import com.example.composeproject.data.ConfigViewModel
 import com.example.composeproject.data.model.Dog
 
@@ -58,6 +63,8 @@ fun HomeScreen(
 ) {
     val searchQuery = remember { mutableStateOf("") }
     val filteredDogs = remember { mutableStateListOf<Dog>() }
+    val painter = rememberAsyncImagePainter(model = R.drawable.furrywalk_logo)
+
 
     val onSearchClick: () -> Unit = {
         val query = searchQuery.value.trim()
@@ -73,17 +80,48 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize() // Take up the entire screen space
             .padding(16.dp), // Applies padding to edges of Column
-        horizontalAlignment = Alignment.Start, // Align content to the start horizontally
         verticalArrangement = Arrangement.spacedBy(16.dp) // Add consistent spacing between items
     ) {
 
-        Text(text = "Velkommen " + viewModel.firstName + ' ' + viewModel.lastName)
+        // Welcome, title and description
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
 
-        // Title
-        Text(text = "Furry friends near you", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        ) { // Welcome
+            Text(text = "Welcome, " + viewModel.firstName + ' ' + viewModel.lastName,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium)
+        }
 
-        // Description
-        Text(text = "Find your favorite dog, and take a walk today", color = Color.Gray)
+        // Logo
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Spacer(Modifier.height(75.dp))
+            Image(
+                painter = painter,
+                contentDescription = "App Logo",
+                modifier = Modifier
+                    .height(120.dp)
+                    .width(300.dp)
+            )
+        }
+
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+
+        ) { // Description
+            Text(text = "Find your furry friend, and take a walk today", color = Color.Gray,
+            fontWeight = FontWeight.Medium)
+        }
+
+        Divider(modifier = Modifier.padding(vertical = 8.dp), color = Color.LightGray, thickness = 1.dp)
 
         Row(
             modifier = Modifier
@@ -91,6 +129,7 @@ fun HomeScreen(
                 .padding(8.dp), // Optional padding
             verticalAlignment = Alignment.CenterVertically // Align search bar and button vertically
         ) {
+
             // Search Bar
             OutlinedTextField(
                 value = searchQuery.value, // Current text in text field (empty)
