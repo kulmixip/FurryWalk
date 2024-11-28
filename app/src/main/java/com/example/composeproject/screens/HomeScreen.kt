@@ -147,8 +147,7 @@ fun HomeScreen(
                 onClick = onSearchClick, // Action when button is clicked
                 modifier = Modifier
                     .height(56.dp), // Match height of the text field for alignment
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary,
-                ),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(12.dp) // Optional: match the text field's rounded corners
             ) {
                 Text(text = "Search")
