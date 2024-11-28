@@ -68,237 +68,201 @@ fun HomeScreen(
     val filteredDogs = remember { mutableStateListOf<Dog>() }
     val painter = rememberAsyncImagePainter(model = R.drawable.furrywalk_logo)
 
-
     val onSearchClick: () -> Unit = {
         val query = searchQuery.value.trim()
         Log.d("Homescreen", "searchQuery: $query")
         val searchResults = viewModel.searchDogs(query)
-        Log.d("Homescreen", "searchResults: ${viewModel.searchDogs(searchQuery.value)}")
         filteredDogs.clear()
         filteredDogs.addAll(searchResults)
     }
 
-    // Main column layout
-    Column(
+    // LazyColumn for full screen scrollability
+    LazyColumn(
         modifier = Modifier
-            .fillMaxSize() // Take up the entire screen space
-            .padding(16.dp), // Applies padding to edges of Column
-        verticalArrangement = Arrangement.spacedBy(16.dp) // Add consistent spacing between items
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-
-        // Welcome
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-
-        ) {
-            Text(text = "Welcome, " + viewModel.firstName + ' ' + viewModel.lastName,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium)
-        }
-
-        // Logo
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Spacer(Modifier.height(75.dp))
-            Image(
-                painter = painter,
-                contentDescription = "App Logo",
-                modifier = Modifier
-                    .height(120.dp)
-                    .width(300.dp)
-            )
-        }
-
-        // Divider
-        Divider(modifier = Modifier.padding(vertical = 8.dp), color = Color.LightGray, thickness = 1.dp)
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp), // Optional padding
-
-            verticalAlignment = Alignment.CenterVertically // Align search bar and button vertically
-        ) {
-
-            // Search Bar
-            OutlinedTextField(
-                value = searchQuery.value, // Current text in text field (empty)
-                onValueChange = { newText -> searchQuery.value = newText }, // Handle text change
-                modifier = Modifier
-                    .weight(1f) // Take up remaining space in the row
-                    .padding(end = 8.dp), // Add space between the search bar and button
-                placeholder = { Text(text = "Search") }, // Placeholder text
-                shape = RoundedCornerShape(12.dp), // Round corners
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search, // Use built-in Material Search icon
-                        contentDescription = "Search Icon"
-                    )
-                }
-            )
-
-            // Search Button
-            Button(
-                onClick = onSearchClick, // Action when button is clicked
-                modifier = Modifier
-                    .height(56.dp), // Match height of the text field for alignment
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                shape = RoundedCornerShape(12.dp) // Optional: match the text field's rounded corners
+        // Welcome Row
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text(text = "Search")
+                Text(
+                    text = "Welcome, ${viewModel.firstName} ${viewModel.lastName}",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
             }
         }
 
-        if (filteredDogs.isEmpty()) {
-            Text(text = "Found 0 results", color = Color.Gray)
-        } else {
-            Text(text = "Found ${filteredDogs.size} result(s)")
-
-            // List of filtered dogs
-            LazyColumn(
+        // Logo
+        item {
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                items(filteredDogs) { dog ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp) // Set a height for each dog box
-                            .padding(8.dp) // Padding around each dog box
-                    ) {
-                        // Replace with actual dog image and details
-                        AsyncImage(
-                            model = dog.image, // Assuming dog.image is a URL or Image
-                            contentDescription = dog.name,
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop // Crop to fit
+                Spacer(Modifier.height(75.dp))
+                Image(
+                    painter = painter,
+                    contentDescription = "App Logo",
+                    modifier = Modifier
+                        .height(120.dp)
+                        .width(300.dp)
+                )
+            }
+        }
+
+        // Divider
+        item {
+            Divider(modifier = Modifier.padding(vertical = 8.dp), color = Color.LightGray, thickness = 1.dp)
+        }
+
+        // Search Section
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedTextField(
+                    value = searchQuery.value,
+                    onValueChange = { newText -> searchQuery.value = newText },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp),
+                    placeholder = { Text(text = "Search") },
+                    shape = RoundedCornerShape(12.dp),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search Icon"
                         )
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = dog.breed, // Display the breed of the dog
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp
-                            )
-                            Text(
-                                text = dog.name, // Display the dog's name
-                                color = Color.White,
-                                fontSize = 16.sp
-                            )
-                        }
+                    }
+                )
+
+                Button(
+                    onClick = onSearchClick,
+                    modifier = Modifier.height(56.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(text = "Search")
+                }
+            }
+        }
+
+        // Filtered Dogs List
+        if (filteredDogs.isEmpty()) {
+            item {
+                Text(text = "Found 0 results", color = Color.Gray)
+            }
+        } else {
+            item {
+                Text(text = "Found ${filteredDogs.size} result(s)")
+            }
+            items(filteredDogs) { dog ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .padding(8.dp)
+                ) {
+                    AsyncImage(
+                        model = dog.image,
+                        contentDescription = dog.name,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = dog.breed,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                        )
+                        Text(
+                            text = dog.name,
+                            color = Color.White,
+                            fontSize = 16.sp
+                        )
                     }
                 }
             }
         }
 
-        // Divider
-        Divider(modifier = Modifier.padding(vertical = 8.dp), color = Color.LightGray, thickness = 1.dp)
-
-
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-        )
-        {
+        // Sort Section
+        item {
             Text(text = "Sort on activity level", fontSize = 22.sp, fontWeight = FontWeight.Bold)
         }
 
-
-        // In this row i want to have a sort function that is sorting on low, middel or high activitylevel!
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()), // Enable horizontal scrolling if needed
-            horizontalArrangement = Arrangement.spacedBy(8.dp) // Space out each button
-        ) {
-            val sortDogsByActivityLevel: (String) -> Unit = { level ->
-                filteredDogs.clear()
-                if (level == "All") {
-                    filteredDogs.addAll(viewModel.dogs)
-                } else {
-                    filteredDogs.addAll(viewModel.dogs.filter { it.activity.equals(level, ignoreCase = true) })
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                val sortDogsByActivityLevel: (String) -> Unit = { level ->
+                    filteredDogs.clear()
+                    if (level == "All") {
+                        filteredDogs.addAll(viewModel.dogs)
+                    } else {
+                        filteredDogs.addAll(viewModel.dogs.filter { it.activity.equals(level, ignoreCase = true) })
+                    }
                 }
-            }
 
-            // Sorting buttons
-            Button(
-                onClick = { sortDogsByActivityLevel("Low") },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Text(text = "Low Activity")
-            }
-
-            Button(
-                onClick = { sortDogsByActivityLevel("Normal") },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Text(text = "Normal Activity")
-            }
-
-            Button(
-                onClick = { sortDogsByActivityLevel("High") },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Text(text = "High Activity")
-            }
-
-            Button(
-                onClick = { sortDogsByActivityLevel("All") },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Text(text = "All")
+                // Sorting buttons
+                Button(onClick = { sortDogsByActivityLevel("Low") }, shape = RoundedCornerShape(12.dp)) {
+                    Text(text = "Low Activity")
+                }
+                Button(onClick = { sortDogsByActivityLevel("Normal") }, shape = RoundedCornerShape(12.dp)) {
+                    Text(text = "Normal Activity")
+                }
+                Button(onClick = { sortDogsByActivityLevel("High") }, shape = RoundedCornerShape(12.dp)) {
+                    Text(text = "High Activity")
+                }
+                Button(onClick = { sortDogsByActivityLevel("All") }, shape = RoundedCornerShape(12.dp)) {
+                    Text(text = "All")
+                }
             }
         }
 
-        // Divider
-        Divider(modifier = Modifier.padding(vertical = 8.dp), color = Color.LightGray, thickness = 1.dp)
-
-        Spacer(modifier = Modifier.height(2.dp)) // Space between category and all dogs
-
+        // Dog Categories
+        item {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth() // Full width of row
-                    .horizontalScroll(rememberScrollState()), // Enable horizontal scrolling
-                horizontalArrangement = Arrangement.spacedBy(8.dp) // Space out each item
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 viewModel.dogs.forEach { dog ->
-
-                    // Each dog item is wrapped in a Box for the background image and text on top
                     Box(
                         modifier = Modifier
-                            .size(200.dp) // Set the size of each item
-                            .padding(8.dp) // Add some padding
+                            .size(200.dp)
+                            .padding(8.dp)
                             .clickable {
-                                // Set the selected dog in the ViewModel
                                 viewModel.selectedDog = dog
-                                // Navigate to the dog profile screen
                                 navController.navigate("dogProfile")
                             }
                     ) {
-                        // Load the dog's image as the background
                         AsyncImage(
-                            model = dog.image, // Assuming `imageUrl` is the field in your `Dog` data model
+                            model = dog.image,
                             contentDescription = "Dog Image",
-                            modifier = Modifier.fillMaxSize()
-                                .clip(RoundedCornerShape(12.dp)), // Gjør hjørnene avrundede
-                            contentScale = ContentScale.Crop // Crop image to fit
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp)),
+                            contentScale = ContentScale.Crop
                         )
-
-                        // Overlay text on top of the image
                         Column(
                             modifier = Modifier
                                 .align(Alignment.Center)
@@ -308,7 +272,7 @@ fun HomeScreen(
                             verticalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = dog.name, // Display dog breed
+                                text = dog.name,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp
@@ -317,41 +281,6 @@ fun HomeScreen(
                     }
                 }
             }
-
-            // Navigation messages????
-            Row(
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate("messages")
-                    }
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically  // Align icon and text vertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Profile Icon",
-                    modifier = Modifier.size(48.dp),
-                )
-                Spacer(modifier = Modifier.width(8.dp))  // Space between icon and text
-                Text(text = "Messages")
-            }
-
-            // Navigation messages????
-            Row(
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate("allMessages")
-                    }
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically  // Align icon and text vertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Profile Icon",
-                    modifier = Modifier.size(48.dp),
-                )
-                Spacer(modifier = Modifier.width(8.dp))  // Space between icon and text
-                Text(text = "All messages")
-            }
         }
     }
+}

@@ -16,13 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.composeproject.RetrofitInstance
 import com.example.composeproject.data.ConfigViewModel
 import com.example.composeproject.data.model.NewMessageRequest
-import com.example.composeproject.navigation.BottomNavigationBar
 import kotlinx.coroutines.launch
 
 // Screen for showing a specific message between users
@@ -39,15 +37,10 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
     val messages = remember { mutableStateListOf<String>() }
 
 
-    if (conversation != null) {
-        Text(text = conversation.dog_id)
-    }
-
-
     // Load messages for the selected conversation
     LaunchedEffect(conversation) {
         messages.clear()
-        conversation?.messages?.map { "${it.senderId}: ${it.content}" }?.let { messages.addAll(it) }
+        conversation?.messages?.map { "${it.owner_name}: ${it.content}" }?.let { messages.addAll(it) }
     }
 
     // State to hold the current text input
@@ -63,7 +56,6 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            reverseLayout = true // Most recent messages at the bottom
         ) {
             items(messages.size) { index ->
                 Text(
@@ -73,17 +65,6 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                 )
             }
         }
-
-//        Button(
-//            onClick = {
-//                Log.d("MessagesScreen", "Current messages: $messages")
-//            },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(vertical = 8.dp)
-//        ) {
-//            Text(text = "Log Messages")
-//        }
 
         // Input field and Send button
         Row(
@@ -109,22 +90,32 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                         coroutineScope.launch {
 
                             // Create a new message for the conversation
-                            // Må endres til det blir lagt til riktig conversation.id osv
-                            val newMessageRequest = NewMessageRequest(
-                                userId = 1,
-                                ownerId = 2,
-                                dogId = 1,
-                                message = inputText.text,
-                                sentby = 1
-                            )
+                            val newMessageRequest = conversation?.let {
+                                NewMessageRequest(
+                                    userId = conversation.user_id,
+                                    ownerId = 2, // Hvordan finne dette?
+                                    dogId = conversation.dog_id,
+                                    message = inputText.text,
+                                    sentby = conversation.user_id
+                                )
+                            }
 
                             try {
-                                val response = RetrofitInstance.api.sendMessage(newMessageRequest)
-                                if (response.status == 200) {
-                                    messages.add(0, "You: ${inputText.text}")
-                                    inputText = TextFieldValue("")
-                                } else {
-                                    Toast.makeText(context, "Send Failed: ${response.message}", Toast.LENGTH_SHORT).show()
+                                val response = newMessageRequest?.let {
+                                    RetrofitInstance.api.sendMessage(
+                                        it
+                                    )
+                                }
+                                if (response != null) {
+                                    if (response.status == 200) {
+                                        // Legg til navn, sett på bunnen
+                                        if (conversation != null) {
+                                            messages.add("${viewModel.firstName}: ${inputText.text}")
+                                        }
+                                        inputText = TextFieldValue("")
+                                    } else {
+                                        Toast.makeText(context, "Send Failed: ${response.message}", Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                             } catch (e: Exception) {
                                 Toast.makeText(context, "Send Failed: ${e.message}", Toast.LENGTH_SHORT).show()
