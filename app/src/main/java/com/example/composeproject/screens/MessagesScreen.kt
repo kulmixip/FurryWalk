@@ -39,10 +39,9 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
     val messages = remember { mutableStateListOf<String>() }
 
 
-/*    // Krasjer når jeg prøver å hente dogId, userId osv fra spesifikke samtalen, why?
     if (conversation != null) {
-        Text(text = conversation.dogId)
-    }*/
+        Text(text = conversation.dog_id)
+    }
 
 
     // Load messages for the selected conversation
