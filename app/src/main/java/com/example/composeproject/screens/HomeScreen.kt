@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -83,14 +84,14 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp) // Add consistent spacing between items
     ) {
 
-        // Welcome, title and description
+        // Welcome
         Row (
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
 
-        ) { // Welcome
-            Text(text = "Welcome, " + viewModel.firstName + ' ' + viewModel.lastName,
+        ) {
+            Text(text = "Welcome " + viewModel.firstName + ' ' + viewModel.lastName,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium)
         }
@@ -111,22 +112,14 @@ fun HomeScreen(
             )
         }
 
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-
-        ) { // Description
-            Text(text = "Find your furry friend, and take a walk today", color = Color.Gray,
-            fontWeight = FontWeight.Medium)
-        }
-
+        // Divider
         Divider(modifier = Modifier.padding(vertical = 8.dp), color = Color.LightGray, thickness = 1.dp)
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp), // Optional padding
+
             verticalAlignment = Alignment.CenterVertically // Align search bar and button vertically
         ) {
 
@@ -208,6 +201,10 @@ fun HomeScreen(
             }
         }
 
+        // Divider
+        Divider(modifier = Modifier.padding(vertical = 8.dp), color = Color.LightGray, thickness = 1.dp)
+
+
         Row (
             modifier = Modifier
                 .fillMaxWidth()
@@ -267,6 +264,8 @@ fun HomeScreen(
             }
         }
 
+        // Divider
+        Divider(modifier = Modifier.padding(vertical = 8.dp), color = Color.LightGray, thickness = 1.dp)
 
         Spacer(modifier = Modifier.height(2.dp)) // Space between category and all dogs
 
