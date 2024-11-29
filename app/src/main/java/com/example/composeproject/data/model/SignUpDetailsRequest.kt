@@ -4,6 +4,7 @@ data class SignUpDetailsRequest(
     val action: String = "createUser",
     val firstName: String,
     val lastName: String,
+    val username: String,
     val email: String,
     val password: String,
     val phone: String,

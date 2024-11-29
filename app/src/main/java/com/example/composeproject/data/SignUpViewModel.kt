@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
 class SignUpViewModel: ViewModel() {
+    var username by mutableStateOf("")
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var repeatPassword by mutableStateOf("")

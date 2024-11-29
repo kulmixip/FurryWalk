@@ -124,7 +124,7 @@ fun NavigationApp() {
                 SignUpDetailsScreen(
                     navController,
                     signUpViewModel,
-                    onSignUpDetailsSuccess = {status, message, profile ->
+                    onSignUpDetailsSuccess = {status, message, profile, dogs, conversations ->
                         if(status == 200){
                             configViewModel.id = profile.id
                             configViewModel.firstName = profile.firstName
@@ -135,6 +135,9 @@ fun NavigationApp() {
                             configViewModel.rating = profile.rating
                             configViewModel.location = profile.location
                             configViewModel.image = profile.image
+
+                            configViewModel.updateDogs(dogs)
+                            configViewModel.updateConversations(conversations)
 
                             navController.navigate("home")
                         } else {
