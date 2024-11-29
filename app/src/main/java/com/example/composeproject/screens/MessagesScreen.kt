@@ -102,7 +102,8 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
 
                             // Får ikke riktig verdi, mulig pga mismatch database?
                             if (dog != null) {
-                                Toast.makeText(context, "${dog.ownerId}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "${dog.owner_id}", Toast.LENGTH_SHORT).show()
+                                Log.d("DEBUG_TAG", dog.toString())
                             }
 
                             // Ny message trenger

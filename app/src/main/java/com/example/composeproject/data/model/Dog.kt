@@ -1,7 +1,7 @@
 package com.example.composeproject.data.model
 
 data class Dog(
-    val ownerId: Int,
+    val owner_id: Int,
     val name: String,
     val description: String,
     val breed: String,
