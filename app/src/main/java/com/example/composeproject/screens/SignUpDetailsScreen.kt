@@ -41,6 +41,8 @@ import com.example.composeproject.RetrofitInstance
 import com.example.composeproject.components.InputField
 import com.example.composeproject.components.NumberField
 import com.example.composeproject.data.SignUpViewModel
+import com.example.composeproject.data.model.Conversation
+import com.example.composeproject.data.model.Dog
 import com.example.composeproject.data.model.Profile
 import com.example.composeproject.data.model.SignUpDetailsRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -50,7 +52,7 @@ import kotlinx.coroutines.launch
 fun SignUpDetailsScreen(
     navController: NavHostController,
     viewModel: SignUpViewModel,
-    onSignUpDetailsSuccess: (Int, String, Profile) -> Unit
+    onSignUpDetailsSuccess: (Int, String, Profile, List<Dog>, List<Conversation>) -> Unit
 ) {
     val context = LocalContext.current
     val systemUiController = rememberSystemUiController()
@@ -153,6 +155,7 @@ fun SignUpDetailsScreen(
                         val request = SignUpDetailsRequest(
                             firstName = viewModel.firstName,
                             lastName = viewModel.lastName,
+                            username = viewModel.username,
                             email = viewModel.email,
                             password = viewModel.password,
                             phone = viewModel.phone,
@@ -164,8 +167,10 @@ fun SignUpDetailsScreen(
                             val status = response.status
                             val message = response.message
                             val profile = response.profile
+                            val dogs = response.dogs
+                            val conversation = response.conversations
 
-                            onSignUpDetailsSuccess(status, message, profile)
+                            onSignUpDetailsSuccess(status, message, profile, dogs, conversation)
                         } catch (e: Exception) {
                             Toast.makeText(context, "Signup details failed", Toast.LENGTH_SHORT).show()
                             Log.e("LoginError", "Login failed", e)

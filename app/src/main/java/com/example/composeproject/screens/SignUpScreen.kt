@@ -16,6 +16,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -104,6 +105,13 @@ fun SignUpScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             InputField(
+                label = "Username",
+                value = remember { mutableStateOf(viewModel.username) },
+                onValueChange = { viewModel.username = it },
+                leadingIcon = Icons.Default.Person
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            InputField(
                 label = "Email",
                 value = remember { mutableStateOf(viewModel.email) },
                 onValueChange = { viewModel.email = it },
@@ -141,6 +149,7 @@ fun SignUpScreen(
                     } else {
                         coroutineScope.launch {
                             val signupRequest = SignUpRequest(
+                                username = viewModel.username,
                                 email = viewModel.email,
                                 password = viewModel.password
                             )
