@@ -124,7 +124,7 @@ fun DogProfile(
 
                         // Message icon button
                         IconButton(
-                            onClick = { navController.navigate("messages/${null}") }, // Navigate to the "newMessage" screen
+                            onClick = { navController.navigate("messages/${null}") }, // Navigate to the "Message" screen
                             modifier = Modifier
                                 .align(Alignment.CenterEnd) // Align the icon to the end
                                 .padding(end = 75.dp)

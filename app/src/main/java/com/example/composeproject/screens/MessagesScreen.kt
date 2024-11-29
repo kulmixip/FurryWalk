@@ -92,7 +92,7 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                             // Create a new message for the conversation
                             val request =  NewMessageRequest(
                                 userId = viewModel.id.toString(),
-                                ownerId = 2, // Hvordan finne dette?
+                                ownerId = 2, // Hvordan finne dette? Filtrere doglist?
                                 dogId = conversation?.dog_id.toString(),
                                 message = inputText.text,
                                 sentby = viewModel.id.toString()
@@ -104,7 +104,6 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
 
                                 if (response != null) {
                                     if (response.status == 200) {
-                                        // Legg til navn, sett på bunnen
                                         if (conversation != null) {
                                             messages.add("${viewModel.firstName}: ${inputText.text}")
                                         }
