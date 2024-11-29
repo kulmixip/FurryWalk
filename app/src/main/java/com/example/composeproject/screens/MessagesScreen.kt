@@ -92,7 +92,7 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                             // Create a new message for the conversation
                             val request =  NewMessageRequest(
                                 userId = viewModel.id.toString(),
-                                ownerId = 2, // Hvordan finne dette? Filtrere doglist?
+                                ownerId = conversation?.owner_id.toString(),
                                 dogId = conversation?.dog_id.toString(),
                                 message = inputText.text,
                                 sentby = viewModel.id.toString()
