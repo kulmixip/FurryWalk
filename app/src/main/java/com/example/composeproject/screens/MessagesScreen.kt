@@ -35,6 +35,8 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
 
     // State to hold the list of chat messages
     val messages = remember { mutableStateListOf<String>() }
+    val dog = viewModel.selectedDog
+
 
 
     // Load messages for the selected conversation
@@ -98,6 +100,17 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                                 sentby = viewModel.id.toString()
                             )
 
+                            // Får ikke riktig verdi, mulig pga mismatch database?
+                            if (dog != null) {
+                                Toast.makeText(context, "${dog.ownerId}", Toast.LENGTH_SHORT).show()
+                            }
+
+                            // Ny message trenger
+                            // userId (hvem som skriver) viewmodel
+                            // ownerId (hvem som eier) dog.ownerid?
+                            // dogId (hvilken hund) dog.id?
+                            // message (selve meldingen) inputText
+                            // sentby == userId viewmodel
 
                             try {
                                 val response = RetrofitInstance.api.sendMessage(request);
