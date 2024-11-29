@@ -77,7 +77,7 @@ fun AllMessagesScreen(navController: NavHostController, viewModel: ConfigViewMod
                     ) {
                         // Sender ID
                         Text(
-                            text = "Sender: ${lastMessage?.owner_name ?: "Unknown"}",
+                            text = lastMessage?.owner_name ?: "Unknown",
                             color = Color.Black
                         )
 

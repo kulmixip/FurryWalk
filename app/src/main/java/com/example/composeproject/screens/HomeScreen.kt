@@ -65,7 +65,7 @@ fun HomeScreen(
     viewModel: ConfigViewModel
 ) {
     val searchQuery = remember { mutableStateOf("") }
-    val filteredDogs = remember { mutableStateListOf<Dog>() }
+    val filteredDogs = remember { mutableStateListOf<Dog>().apply { addAll(viewModel.dogs) } } // Default to all dogs
     val painter = rememberAsyncImagePainter(model = R.drawable.furrywalk_logo)
 
     val onSearchClick: () -> Unit = {
@@ -76,14 +76,13 @@ fun HomeScreen(
         filteredDogs.addAll(searchResults)
     }
 
-    // LazyColumn for full screen scrollability
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Welcome Row
+        // Welcome Section
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -98,7 +97,7 @@ fun HomeScreen(
             }
         }
 
-        // Logo
+        // Logo Section
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -156,50 +155,6 @@ fun HomeScreen(
             }
         }
 
-        // Filtered Dogs List
-        if (filteredDogs.isEmpty()) {
-            item {
-                Text(text = "Found 0 results", color = Color.Gray)
-            }
-        } else {
-            item {
-                Text(text = "Found ${filteredDogs.size} result(s)")
-            }
-            items(filteredDogs) { dog ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(8.dp)
-                ) {
-                    AsyncImage(
-                        model = dog.image,
-                        contentDescription = dog.name,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = dog.breed,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
-                        )
-                        Text(
-                            text = dog.name,
-                            color = Color.White,
-                            fontSize = 16.sp
-                        )
-                    }
-                }
-            }
-        }
-
         // Sort Section
         item {
             Text(text = "Sort on activity level", fontSize = 22.sp, fontWeight = FontWeight.Bold)
@@ -217,7 +172,9 @@ fun HomeScreen(
                     if (level == "All") {
                         filteredDogs.addAll(viewModel.dogs)
                     } else {
-                        filteredDogs.addAll(viewModel.dogs.filter { it.activity.equals(level, ignoreCase = true) })
+                        filteredDogs.addAll(
+                            viewModel.dogs.filter { it.activity.equals(level, ignoreCase = true) }
+                        )
                     }
                 }
 
@@ -237,46 +194,50 @@ fun HomeScreen(
             }
         }
 
-        // Dog Categories
+        // Dog Categories Section
         item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                viewModel.dogs.forEach { dog ->
-                    Box(
-                        modifier = Modifier
-                            .size(200.dp)
-                            .padding(8.dp)
-                            .clickable {
-                                viewModel.selectedDog = dog
-                                navController.navigate("dogProfile")
-                            }
-                    ) {
-                        AsyncImage(
-                            model = dog.image,
-                            contentDescription = "Dog Image",
+            if (filteredDogs.isEmpty()) {
+                Text(text = "No dogs match the selected filter", color = Color.Gray)
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    filteredDogs.forEach { dog ->
+                        Box(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .clip(RoundedCornerShape(12.dp)),
-                            contentScale = ContentScale.Crop
-                        )
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .fillMaxSize()
-                                .padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
+                                .size(200.dp)
+                                .padding(8.dp)
+                                .clickable {
+                                    viewModel.selectedDog = dog
+                                    navController.navigate("dogProfile")
+                                }
                         ) {
-                            Text(
-                                text = dog.name,
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp
+                            AsyncImage(
+                                model = dog.image,
+                                contentDescription = "Dog Image",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(12.dp)),
+                                contentScale = ContentScale.Crop
                             )
+                            Column(
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .fillMaxSize()
+                                    .padding(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = dog.name,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 18.sp
+                                )
+                            }
                         }
                     }
                 }
