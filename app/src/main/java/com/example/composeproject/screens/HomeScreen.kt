@@ -212,6 +212,7 @@ fun HomeScreen(
                                 .padding(8.dp)
                                 .clickable {
                                     viewModel.selectedDog = dog
+                                    viewModel.selectedDogId = dog.id.toString()
                                     navController.navigate("dogProfile")
                                 }
                         ) {

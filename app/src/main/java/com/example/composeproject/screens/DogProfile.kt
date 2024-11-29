@@ -1,6 +1,8 @@
 package com.example.composeproject.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -124,7 +126,19 @@ fun DogProfile(
 
                         // Message icon button
                         IconButton(
-                            onClick = { navController.navigate("messages/${null}") }, // Navigate to the "Message" screen
+                            onClick = {
+                                // Search for an existing conversation
+                                val matchingConversation = viewModel.conversations.find {
+                                    it.user2Id == viewModel.id.toString() && it.dog_id == dog.id.toString()
+                                }
+
+                                // Navigate to the messages screen with the conversation ID or null
+                                val conversationId = matchingConversation?.id
+
+                                Log.d("HENRIK_TESTING", conversationId.toString())
+                                Log.d("HENRIK_TESTING2", viewModel.conversations.toString())
+                                navController.navigate("messages/${conversationId ?: "null"}")
+                            },
                             modifier = Modifier
                                 .align(Alignment.CenterEnd) // Align the icon to the end
                                 .padding(end = 75.dp)
@@ -153,19 +167,25 @@ fun DogProfile(
 
             // Key feature rows
             item {
-                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)) {
                     KeyFeatureBox(label = "Age", value = dog.age.toString(), modifier = Modifier.weight(1f))
                     KeyFeatureBox(label = "Weight", value = dog.weight.toString(), modifier = Modifier.weight(1f))
                 }
             }
             item {
-                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)) {
                     KeyFeatureBox(label = "Sex", value = dog.sex, modifier = Modifier.weight(1f))
                     KeyFeatureBox(label = "Color", value = dog.color, modifier = Modifier.weight(1f))
                 }
             }
             item {
-                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)) {
                     KeyFeatureBox(label = "Activity", value = dog.activity, modifier = Modifier.weight(1f))
                     KeyFeatureBox(label = "Availability", value = dog.available.toString(), modifier = Modifier.weight(1f))
                 }

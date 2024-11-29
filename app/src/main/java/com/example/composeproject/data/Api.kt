@@ -1,5 +1,7 @@
 package com.example.composeproject.data
 
+import com.example.composeproject.data.model.DeleteRequest
+import com.example.composeproject.data.model.DeleteResponse
 import com.example.composeproject.data.model.LoginRequest
 import com.example.composeproject.data.model.LoginResponse
 import com.example.composeproject.data.model.NewMessageRequest
@@ -28,6 +30,9 @@ interface Api {
 
     @POST(".")
     suspend fun updateProfile(@Body request: UpdateProfileRequest): UpdateProfileResponse
+
+    @POST(".")
+    suspend fun deleteConversation(@Body request: DeleteRequest): DeleteResponse
 
     companion object {
         const val BASE_URL = "https://biljard.catchmedia.no/api2/"

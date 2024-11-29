@@ -20,8 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.composeproject.RetrofitInstance
 import com.example.composeproject.data.ConfigViewModel
+import com.example.composeproject.data.model.Conversation
+import com.example.composeproject.data.model.Message
 import com.example.composeproject.data.model.NewMessageRequest
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 // Screen for showing a specific message between users
 @SuppressLint("NewApi")
@@ -94,8 +97,8 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                             // Create a new message for the conversation
                             val request =  NewMessageRequest(
                                 userId = viewModel.id.toString(),
-                                ownerId = conversation?.owner_id.toString(),
-                                dogId = conversation?.dog_id.toString(),
+                                ownerId = dog?.owner_id.toString(),
+                                dogId = viewModel.selectedDogId,
                                 message = inputText.text,
                                 sentby = viewModel.id.toString()
                             )
@@ -116,19 +119,44 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                             try {
                                 val response = RetrofitInstance.api.sendMessage(request);
 
-                                if (response != null) {
-                                    if (response.status == 200) {
-                                        if (conversation != null) {
-                                            messages.add("${viewModel.firstName}: ${inputText.text}")
-                                        }
-                                        inputText = TextFieldValue("")
-                                    } else {
-                                        Toast.makeText(context, "Send Failed: ${response.message}", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-                                else {
-                                    Toast.makeText(context, "yolo", Toast.LENGTH_SHORT).show()
+                                if (response != null && response.status == 200) {
+                                    // Create a new Message object
+                                    val newMessage = Message(
+                                        senderId = viewModel.id.toString(),
+                                        owner_name = response.owner_name,
+                                        dog_name = response.dog_name,
+                                        dog_image = response.dog_image,
+                                        content = inputText.text,
+                                        dateTime = LocalDateTime.now()
+                                    )
 
+                                    // Check if the conversation exists
+                                    val existingConversation = viewModel.conversations.find { it.id == response.conversation_id.toString() }
+
+                                    if (existingConversation != null) {
+                                        // Add the new message to the existing conversation
+                                        existingConversation.messages += newMessage
+                                    } else {
+                                        // Create a new conversation
+                                        val newConversation = Conversation(
+                                            id = response.conversation_id.toString(),
+                                            owner_id = (dog?.owner_id ?: "").toString(),
+                                            dog_id = (dog?.id ?: "").toString(),
+                                            user2Id = (dog?.owner_id ?: "").toString(),
+                                            messages = listOf(newMessage),
+                                        )
+
+                                        // Add the new conversation to the ViewModel
+                                        viewModel.conversations.add(newConversation)
+                                    }
+
+                                    // Update the UI with the new message
+                                    messages.add("${viewModel.firstName}: ${inputText.text}")
+
+                                    // Clear the input field
+                                    inputText = TextFieldValue("")
+                                } else {
+                                    Toast.makeText(context, "Send Failed: ${response?.message}", Toast.LENGTH_SHORT).show()
                                 }
                             } catch (e: Exception) {
                                 Toast.makeText(context, "Send Failed: ${e.message}", Toast.LENGTH_SHORT).show()

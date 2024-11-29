@@ -37,6 +37,7 @@ class ConfigViewModel : ViewModel() {
     var dogs = mutableStateListOf<Dog>()
         private set
     var selectedDog: Dog? = null
+    var selectedDogId by mutableStateOf("0");
 
     fun updateDogs(dogList: List<Dog>) {
         dogs.clear() // Clear existing data
@@ -46,6 +47,10 @@ class ConfigViewModel : ViewModel() {
     fun updateConversations(conversationList: List<Conversation>) {
         conversations.clear()
         conversations.addAll(conversationList)
+    }
+
+    fun removeConversationById(conversationId: Int) {
+        conversations.removeIf { it.id == conversationId.toString() }
     }
 
     // Function to filter dogs based on search query
