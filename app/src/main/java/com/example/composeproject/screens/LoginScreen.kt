@@ -96,7 +96,7 @@ fun LoginScreen(
 
             // Use the universal input fields
             InputField(
-                label = "Email",
+                label = "Username",
                 value = remember { mutableStateOf(username) },
                 onValueChange = { username = it },
                 leadingIcon = Icons.Default.Person
