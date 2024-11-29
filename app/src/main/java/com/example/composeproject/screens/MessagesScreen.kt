@@ -7,7 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -56,6 +60,20 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        IconButton(
+            onClick = {
+                navController.popBackStack() // Navigate back to the previous screen
+            },
+            modifier = Modifier
+                .padding(vertical = 10.dp) // Padding around the button
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.Black // Set the color of the icon
+            )
+        }
+
         // Chat message list
         LazyColumn(
             modifier = Modifier
@@ -102,19 +120,6 @@ fun MessagesScreen(navController: NavHostController, viewModel: ConfigViewModel,
                                 message = inputText.text,
                                 sentby = viewModel.id.toString()
                             )
-
-                            // Får ikke riktig verdi, mulig pga mismatch database?
-                            if (dog != null) {
-                                Toast.makeText(context, "${dog.owner_id}", Toast.LENGTH_SHORT).show()
-                                Log.d("DEBUG_TAG", dog.toString())
-                            }
-
-                            // Ny message trenger
-                            // userId (hvem som skriver) viewmodel
-                            // ownerId (hvem som eier) dog.ownerid?
-                            // dogId (hvilken hund) dog.id?
-                            // message (selve meldingen) inputText
-                            // sentby == userId viewmodel
 
                             try {
                                 val response = RetrofitInstance.api.sendMessage(request);

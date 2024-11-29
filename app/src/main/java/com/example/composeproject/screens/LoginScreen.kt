@@ -91,9 +91,6 @@ fun LoginScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "Email: demo@demo.no")
-            Text(text = "Password: Demo12345")
-
             // Use the universal input fields
             InputField(
                 label = "Username",
@@ -128,12 +125,16 @@ fun LoginScreen(
                         try {
                             val response = RetrofitInstance.api.login(loginRequest)
                             val status = response.status
-                            val message = response.message
-                            val profile = response.profile
-                            val dogs = response.dogs
-                            val conversations = response.conversations
+                            if(status == 200) {
+                                val message = response.message
+                                val profile = response.profile
+                                val dogs = response.dogs
+                                val conversations = response.conversations
 
-                            onLoginSuccess(status, message, profile, dogs, conversations)
+                                onLoginSuccess(status, message, profile, dogs, conversations)
+                            } else {
+                                Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                            }
                         } catch (e: Exception) {
                             Toast.makeText(context, "Login Failed: ${e.message}", Toast.LENGTH_SHORT).show()
                             Log.e("LoginError", "Login failed", e)

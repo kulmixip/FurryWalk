@@ -4,12 +4,9 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
@@ -23,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -34,9 +30,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.composeproject.data.ConfigViewModel
 import com.example.composeproject.data.SignUpViewModel
-import com.example.composeproject.data.model.Dog
 import com.example.composeproject.screens.AllMessagesScreen
-import com.example.composeproject.screens.DetailsScreen
 import com.example.composeproject.screens.DogProfile
 import com.example.composeproject.screens.HomeScreen
 import com.example.composeproject.screens.LoginScreen
@@ -84,7 +78,6 @@ fun NavigationApp() {
                     navController,
                     onLoginSuccess = { status, message, profile, dogs, conversations ->
                         if (status == 200) {
-                            //Toast.makeText(context, "Profile ID: ${profile.id}", Toast.LENGTH_SHORT).show()
                             configViewModel.id = profile.id
                             configViewModel.firstName = profile.firstName
                             configViewModel.lastName = profile.lastName
